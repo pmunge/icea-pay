@@ -1,0 +1,34 @@
+<h2 mat-dialog-title>
+    Update Paybill Amount
+</h2>
+<mat-dialog-content>
+    <form [formGroup]="updateForm" class="update-form">
+        <p class="paybill-summary">
+            <span>{{ paybill.MoMo }}</span> &middot; Paybill {{ paybill.paybill }}
+        </p>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Amount
+            </mat-label>
+            <input matInput type="number" formControlName="amount" placeholder="Enter amount">
+            @if (updateForm.controls.amount.hasError('required')) {
+            <mat-error>
+                Amount is required
+            </mat-error>
+            }
+            @if (updateForm.controls.amount.hasError('min')) {
+            <mat-error>
+                Amount cannot be negative
+            </mat-error>
+            }
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">
+        Cancel
+    </button>
+    <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="save()">
+        {{ saving ? 'Saving…' : 'Update Amount' }}
+    </button>
+</mat-dialog-actions>

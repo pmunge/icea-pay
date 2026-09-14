@@ -1,0 +1,53 @@
+<section class="txn-section">
+  <div class="card-head">
+    <h2>Transaction Log</h2>
+    <p>{{ filtered().length | number }} matching transactions</p>
+  </div>
+
+  <mat-card class="txn-card">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search transactions</mat-label>
+      <input matInput [ngModel]="searchTerm()" (ngModelChange)="applySearch($event)"
+        placeholder="Business unit, branch, payment method or channel">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+
+    <div class="table-container">
+      <table mat-table [dataSource]="paged()" class="txn-table">
+        <ng-container matColumnDef="businessUnit">
+          <th mat-header-cell *matHeaderCellDef>Business Unit</th>
+          <td mat-cell *matCellDef="let t">{{ t.businessUnit }}</td>
+        </ng-container>
+        <ng-container matColumnDef="branch">
+          <th mat-header-cell *matHeaderCellDef>Branch</th>
+          <td mat-cell *matCellDef="let t">{{ t.branch }}</td>
+        </ng-container>
+        <ng-container matColumnDef="paymentMethod">
+          <th mat-header-cell *matHeaderCellDef>Payment Method</th>
+          <td mat-cell *matCellDef="let t">{{ t.paymentMethod }}</td>
+        </ng-container>
+        <ng-container matColumnDef="channel">
+          <th mat-header-cell *matHeaderCellDef>Channel</th>
+          <td mat-cell *matCellDef="let t">{{ t.channel }}</td>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let t">KES {{ t.amount | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let t">{{ t.timestamp | date:'mediumDate' }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+      @if (!filtered().length) {
+      <div class="empty-state">No transactions match your search.</div>
+      }
+    </div>
+
+    <mat-paginator [length]="filtered().length" [pageIndex]="pageIndex()" [pageSize]="pageSize()"
+      [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)"
+      aria-label="Transactions pagination"></mat-paginator>
+  </mat-card>
+</section>

@@ -1,0 +1,63 @@
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/env';
+
+import { Product } from '../models/product';
+
+interface ApiResponse<T> {
+  status: number;
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ProductService {
+
+  private http = inject(HttpClient);
+
+  private readonly apiUrl = `${environment.apiUrl}/products`;
+
+
+  getProducts(): Observable<Product[]> {
+
+    return this.http
+      .get<ApiResponse<Product[]>>(this.apiUrl)
+      .pipe(map((res) => res.data));
+
+  }
+
+
+  createProduct(product: Product): Observable<Product> {
+
+    return this.http
+      .post<ApiResponse<Product>>(this.apiUrl, product)
+      .pipe(map((res) => res.data));
+
+  }
+
+
+  updateProduct(
+    id: number,
+    product: Product
+  ): Observable<Product> {
+
+    return this.http
+      .put<ApiResponse<Product>>(`${this.apiUrl}/${id}`, product)
+      .pipe(map((res) => res.data));
+
+  }
+
+
+  deleteProduct(id: number): Observable<void> {
+
+    return this.http.delete<void>(
+      `${this.apiUrl}/${id}`
+    );
+
+  }
+
+}

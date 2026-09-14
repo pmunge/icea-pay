@@ -1,0 +1,52 @@
+<section class="page">
+    <header class="page-header">
+        <div>
+            <h1>Agents Management</h1>
+            <p>View, create, and manage agents.</p>
+        </div><button mat-flat-button color="primary" type="button"
+            (click)="openCreateDialog()"><mat-icon>add</mat-icon>Create Agent</button>
+    </header>
+    <mat-card class="product-card">
+        <mat-form-field appearance="outline" class="search-field"><mat-label>Search agents</mat-label><input matInput
+                [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+                placeholder="name, agentId, nationalId, phone"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+        <div class="table-container">
+            <table mat-table [dataSource]="pagedAgents" class="product-table">
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef>Agent Name</th>
+                    <td mat-cell *matCellDef="let agent">{{ agent.name }}</td>
+                </ng-container><ng-container matColumnDef="agentId">
+                    <th mat-header-cell *matHeaderCellDef>Agent ID</th>
+                    <td mat-cell *matCellDef="let agent">{{ agent.agentId }}</td>
+                </ng-container><ng-container matColumnDef="nationalId">
+                    <th mat-header-cell *matHeaderCellDef>National ID</th>
+                    <td mat-cell *matCellDef="let agent">{{ agent.nationalId }}</td>
+                </ng-container><ng-container matColumnDef="phone">
+                    <th mat-header-cell *matHeaderCellDef>Phone No</th>
+                    <td mat-cell *matCellDef="let agent">{{ agent.phone }}</td>
+                </ng-container><ng-container matColumnDef="station">
+                    <th mat-header-cell *matHeaderCellDef>Station</th>
+                    <td mat-cell *matCellDef="let agent">{{ agent.station }}</td>
+                </ng-container><ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let agent"><span class="status"
+                            [class.inactive]="agent.status === 'Inactive'">{{ agent.status }}</span></td>
+                </ng-container><ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let agent">
+                        <button mat-icon-button type="button" aria-label="Update status"
+                            (click)="openUpdateDialog(agent)">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>@if (!filteredAgents.length) { <div class="empty-state">No agents match your search.
+            </div> }
+        </div>
+        <mat-paginator [length]="filteredAgents.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)"
+            aria-label="Agents pagination"></mat-paginator>
+    </mat-card>
+</section>

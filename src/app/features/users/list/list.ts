@@ -1,0 +1,78 @@
+import { CommonModule } from '@angular/common';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { Users } from '../../../core/models/users';
+import { UsersService } from '../../../core/services/users';
+import { Form } from '../form/form';
+
+@Component({
+  selector: 'app-business-products',
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatChipsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
+    MatPaginatorModule,
+    MatTableModule],
+  templateUrl: './list.html',
+  styleUrl: './list.scss'
+})
+export class List implements OnInit {
+  private readonly usersService = inject(UsersService);
+  private readonly dialog = inject(MatDialog);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  users: Users[] = [];
+  searchTerm = '';
+  pageIndex = 0;
+  pageSize = 5;
+  readonly pageSizeOptions = [5, 10, 25];
+  readonly displayedColumns = ['fname', 'lname', 'branch','department', 'email', 'phone', 'role', 'status'];
+  get filteredProducts(): Users[] {
+    const term = this.searchTerm.trim().toLowerCase();
+    return !term ? this.users : this.users.filter(user => [user.fname, user.lname, user.branch, user.department, user.email, user.phone, user.role, user.status].some(value => value.toLowerCase().includes(term)));
+  }
+  get pagedUsers(): Users[] {
+    const start = this.pageIndex * this.pageSize;
+    return this.filteredProducts.slice(start, start + this.pageSize);
+  }
+  ngOnInit(): void {
+    this.loadUsers();
+  }
+  loadUsers(): void {
+    this.usersService.getUsers('business').subscribe({
+      next: users => {
+        this.users = users;
+        this.changeDetectorRef.markForCheck();
+      },
+      error: error => console.error('Failed to load business users', error)
+    });
+  }
+  applySearch(): void {
+    this.pageIndex = 0;
+  }
+  changePage(event: PageEvent): void {
+    this.pageIndex = event.pageIndex;
+    this.pageSize = event.pageSize;
+  }
+  openCreateDialog(): void {
+    this.dialog.open(Form, { width: '560px', maxWidth: 'calc(100vw - 32px)' })
+      .afterClosed()
+      .subscribe(created => {
+        if (created) this.loadUsers();
+      });
+  }
+}

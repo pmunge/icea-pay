@@ -1,0 +1,67 @@
+<div class="otp-layout">
+
+  <!-- Left: form panel -->
+  <section class="otp-panel">
+    <header class="brand">
+      <img src="/static/images/logo.png" alt="ICEA LION" class="brand-logo">
+      <span class="brand-name">ICEA LION</span>
+    </header>
+
+    <div class="form-wrap">
+      <h1 class="title">Verify it's you</h1>
+      <p class="subtitle">Enter the 6-digit one-time password to finish signing in</p>
+
+      @if (infoMessage()) {
+      <p class="form-info">{{ infoMessage() }}</p>
+      }
+
+      <form [formGroup]="otpForm" (ngSubmit)="submit()" class="otp-form" novalidate>
+
+        <label class="field">
+          <span class="field-label">One-time password</span>
+          <input
+            type="text"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+            maxlength="6"
+            placeholder="123456"
+            formControlName="code">
+          @if (otpForm.controls.code.touched && otpForm.controls.code.invalid) {
+          <span class="field-error">Enter the 6-digit code</span>
+          }
+        </label>
+
+        @if (errorMessage()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+        }
+
+        <button type="submit" class="btn btn-primary" [disabled]="loading()">
+          {{ loading() ? 'Verifying…' : 'Verify & Continue' }}
+        </button>
+
+        <div class="form-row">
+          <button type="button" class="link-btn" (click)="cancel()">
+            Back to sign in
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </section>
+
+  <!-- Right: image panel -->
+  <aside class="image-panel">
+    <img src="/static/images/login.png" alt="ICEA LION headquarters" class="image-panel-bg">
+    <div class="image-overlay">
+      <span class="overlay-top">ICEA LION</span>
+      <div class="overlay-bottom">
+        <h2 class="overlay-heading">Insurance Portal</h2>
+        <p class="overlay-text">
+          A one-time password keeps your account secure. It expires after use,
+          so request a fresh one any time.
+        </p>
+      </div>
+    </div>
+  </aside>
+
+</div>

@@ -1,0 +1,22 @@
+<div class="breadcrumb-container">
+
+  <a routerLink="/dashboard" class="home-link">
+    <mat-icon>home</mat-icon>
+  </a>
+
+  @for (breadcrumb of breadcrumbs; track breadcrumb.url) {
+
+    <mat-icon class="separator">
+      chevron_right
+    </mat-icon>
+
+    <a
+      [routerLink]="breadcrumb.url"
+      class="breadcrumb-link"
+    >
+      {{ breadcrumb.label }}
+    </a>
+
+  }
+
+</div>

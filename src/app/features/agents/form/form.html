@@ -1,0 +1,84 @@
+<h2 mat-dialog-title>
+    Create a New Agent
+</h2>
+<mat-dialog-content>
+    <form [formGroup]="agentsForm" class="product-form">
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Agent Name
+            </mat-label>
+            <input matInput formControlName="name" placeholder="Agent Name">
+            @if (agentsForm.controls.name.hasError('required')) {
+            <mat-error>
+                Agent Name is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Agent ID
+            </mat-label>
+            <input matInput formControlName="agentId" placeholder="Enter Agent ID">
+            @if (agentsForm.controls.agentId.hasError('required')) {
+            <mat-error>
+                Agent ID is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                National ID
+            </mat-label>
+            <input matInput formControlName="nationalId" placeholder="Enter National ID">
+            @if (agentsForm.controls.nationalId.hasError('required')) {
+            <mat-error>
+                Agent National ID is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                phone
+            </mat-label>
+            <input matInput formControlName="phone" placeholder="Enter Agent Phone Number">
+            @if (agentsForm.controls.phone.hasError('required')) {
+            <mat-error>
+                Phone Number is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Station
+            </mat-label>
+            <input matInput formControlName="station" placeholder="Enter Agent's Station">
+            @if (agentsForm.controls.station.hasError('required')) {
+            <mat-error>
+                Station is required
+            </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Status
+            </mat-label>
+            <mat-select formControlName="status">
+                <mat-option value="Active">
+                    Active
+                </mat-option>
+                <mat-option value="Inactive">
+                    Inactive
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">
+        Cancel
+    </button>
+    <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="save()">
+        {{ saving ? 'Saving…' : 'Create Agent' }}
+    </button>
+</mat-dialog-actions>

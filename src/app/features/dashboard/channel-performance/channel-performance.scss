@@ -1,0 +1,179 @@
+.dashboard {
+    padding-bottom: 0;
+}
+
+
+/* HEADER */
+
+.page-header {
+    margin-bottom: 16px;
+
+    h1 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 500;
+    }
+
+    p {
+        margin-top: 6px;
+        color: var(--app-muted);
+        font-size: 14px;
+    }
+}
+
+
+/* SUMMARY */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-bottom: 16px;
+}
+
+.summary-card {
+    border: 0;
+    border-top: 4px solid var(--app-navy);
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+
+    &:nth-child(2) {
+        border-top-color: var(--app-indigo);
+    }
+
+    &:nth-child(3) {
+        border-top-color: var(--app-coral);
+    }
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #555;
+
+    margin-bottom: 8px;
+}
+
+.income {
+    color: var(--app-blue);
+    font-size: 26px;
+    font-weight: 600;
+}
+
+.income-label {
+    font-size: 12px;
+    color: #888;
+}
+
+.transactions {
+    margin-top: 10px;
+    color: var(--app-navy);
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.transactions-label {
+    font-size: 11px;
+    color: #999;
+}
+
+
+/* LINE CHART */
+
+.income-card {
+    border: 1px solid var(--app-line);
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+}
+
+.line-chart {
+    height: 285px;
+
+    margin-top: 10px;
+}
+
+
+/* BOTTOM */
+
+.analysis-grid {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1.25fr) minmax(360px, .75fr);
+
+    gap: 16px;
+    align-items: start;
+}
+
+.breakdown-column {
+    display: grid;
+    gap: 16px;
+}
+
+
+/* PIE */
+
+.mobile-money-card {
+    border: 1px solid var(--app-line);
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+}
+
+.pie-chart {
+    height: 150px;
+
+    margin-top: 4px;
+}
+
+
+/* TABLE */
+
+.table-card {
+    border: 1px solid var(--app-line);
+    border-radius: 8px;
+    box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+}
+
+.channel-table {
+    width: 100%;
+
+    margin-top: 15px;
+}
+
+th {
+    font-weight: 600;
+}
+
+td,
+th {
+    padding: 10px 12px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .summary-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .analysis-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+    .line-chart {
+        height: 300px;
+    }
+
+}
+
+@media (max-width: 600px) {
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+}

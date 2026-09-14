@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>
+    Create a New Paybill
+</h2>
+<mat-dialog-content>
+    <form [formGroup]="paybillsForm" class="product-form">
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Mobile Money Used
+            </mat-label>
+            <input matInput formControlName="MoMo" placeholder="e.g. MPESA, AIRTEL MONEY, NCBA">
+            @if (paybillsForm.controls.MoMo.hasError('required')) {
+            <mat-error>
+                Mobile Money is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Paybill
+            </mat-label>
+            <input matInput formControlName="paybill" placeholder="Enter paybill number">
+            @if (paybillsForm.controls.paybill.hasError('required')) {
+            <mat-error>
+                Paybill is required
+            </mat-error>
+            }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Status
+            </mat-label>
+            <mat-select formControlName="status">
+                <mat-option value="Active">
+                    Active
+                </mat-option>
+                <mat-option value="Inactive">
+                    Inactive
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">
+        Cancel
+    </button>
+    <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="save()">
+        {{ saving ? 'Saving…' : 'Create Paybill' }}
+    </button>
+</mat-dialog-actions>

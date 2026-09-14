@@ -1,0 +1,115 @@
+<div class="dashboard">
+    <div class="page-header">
+        <div>
+            <h1>Channel Performance</h1>
+            <p>
+                Overview of income and transactions across payment channels
+            </p>
+        </div>
+    </div>
+    <div class="summary-grid">
+
+        @for (channel of channels; track channel.name) {
+
+        <mat-card class="summary-card">
+
+            <mat-card-content>
+
+                <div class="card-title">
+                    {{ channel.name }}
+                </div>
+
+                <div class="income">
+
+                    KES {{ channel.income | number }}
+
+                </div>
+
+                <div class="income-label">
+                    Total income
+                </div>
+
+                <div class="transactions">
+
+                    {{ channel.transactions | number }}
+
+                </div>
+
+                <div class="transactions-label">
+                    Transactions
+                </div>
+
+            </mat-card-content>
+
+        </mat-card>
+
+        }
+
+    </div>
+    <div class="analysis-grid">
+        <mat-card class="income-card">
+            <mat-card-header>
+                <mat-card-title>
+                    Income by Channel
+                </mat-card-title>
+                <mat-card-subtitle>
+                    Monthly income received through each payment channel
+                </mat-card-subtitle>
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <div class="line-chart">
+
+                    <canvas baseChart [data]="lineChartData" [options]="lineChartOptions" type="line">
+
+                    </canvas>
+
+                </div>
+
+            </mat-card-content>
+
+        </mat-card>
+
+
+        <!-- CHANNEL BREAKDOWN -->
+
+        <div class="breakdown-column">
+
+
+            <!-- MOBILE MONEY -->
+
+            <mat-card class="mobile-money-card">
+
+                <mat-card-header>
+
+                    <mat-card-title>
+                        Mobile Money Performance
+                    </mat-card-title>
+
+                    <mat-card-subtitle>
+                        Income contribution by mobile money provider
+                    </mat-card-subtitle>
+
+                </mat-card-header>
+
+
+                <mat-card-content>
+
+                    <div class="pie-chart">
+
+                        <canvas baseChart [data]="createMobileMoneyPieChart()" [options]="pieChartOptions" type="pie">
+
+                        </canvas>
+
+                    </div>
+
+                </mat-card-content>
+
+            </mat-card>
+
+        </div>
+
+    </div>
+
+</div>

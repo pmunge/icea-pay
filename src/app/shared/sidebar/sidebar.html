@@ -1,0 +1,198 @@
+<div class="sidebar-content">
+    <div class="logo">
+        <img class="logo-image" src="/static/images/icea-lion-logo.png" alt="ICEA logo">
+    </div>
+    <div class="navigation">
+        <mat-nav-list>
+            @if (!isHQ()) {
+            <a mat-list-item [routerLink]="unitHomeRoute()" [routerLinkActiveOptions]="{ exact: true }"
+                routerLinkActive="active">
+                <mat-icon matListItemIcon>dashboard</mat-icon>
+                <span matListItemTitle>{{ unitLabel() }} Dashboard</span>
+            </a>
+            <a mat-list-item routerLink="/dashboard/products" routerLinkActive="active">
+                <mat-icon matListItemIcon>inventory_2</mat-icon>
+                <span matListItemTitle>Products</span>
+            </a>
+            <a mat-list-item routerLink="/dashboard/transactions" routerLinkActive="active">
+                <mat-icon matListItemIcon>sync</mat-icon>
+                <span matListItemTitle>Transactions</span>
+            </a>
+            }
+            @if (isHQ()) {
+            <button mat-list-item class="nav-parent" [class.is-open]="dashboardOpen" type="button"
+                (click)="toggleDashboard()">
+                <mat-icon matListItemIcon>analytics</mat-icon>
+                <span matListItemTitle>Dashboard</span>
+                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> -->
+            </button>
+
+            @if (dashboardOpen) {
+            <div class="sub-menu">
+                <a mat-list-item routerLink="/dashboard" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="active">
+                    <mat-icon matListItemIcon>dashboard</mat-icon>
+                    <span matListItemTitle>Overview</span>
+                </a>
+                <button mat-list-item class="nav-parent" [class.is-open]="productPerformanceOpen" type="button"
+                    (click)="toggleProductPerformance()">
+                    <mat-icon matListItemIcon>bar_chart</mat-icon>
+                    <span matListItemTitle>Product Performance</span>
+                    <!-- <mat-icon class="expand-icon">{{ productPerformanceOpen ? 'expand_less' : 'expand_more' }}</mat-icon> -->
+                </button>
+
+                @if (productPerformanceOpen) {
+                <div class="sub-menu nested-menu">
+                    <a mat-list-item routerLink="/dashboard/business-products" routerLinkActive="active">
+                        <mat-icon matListItemIcon>life</mat-icon>
+                        <span matListItemTitle>Life</span>
+                    </a>
+                    <a mat-list-item routerLink="/dashboard/general" routerLinkActive="active">
+                        <mat-icon matListItemIcon>general</mat-icon>
+                        <span matListItemTitle>General</span>
+                    </a>
+                    <a mat-list-item routerLink="/dashboard/health" routerLinkActive="active">
+                        <mat-icon matListItemIcon>medical</mat-icon>
+                        <span matListItemTitle>Medical</span>
+                    </a>
+                    <a mat-list-item routerLink="/dashboard/investment" routerLinkActive="active">
+                        <mat-icon matListItemIcon>invest</mat-icon>
+                        <span matListItemTitle>Investment</span>
+                    </a>
+                </div>
+                }<!--
+
+                <a mat-list-item routerLink="/channels" routerLinkActive="active" class="sub-link">
+                    <mat-icon matListItemIcon>bar_chart</mat-icon>
+                    <span matListItemTitle>Channel Performance</span>
+                </a>
+            -->
+            </div>
+            }
+            <button mat-list-item class="nav-parent" [class.is-open]="productOpen" type="button"
+                (click)="toggleProduct()">
+                <mat-icon matListItemIcon>inventory_2</mat-icon>
+                <span matListItemTitle>Products</span>
+                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> -->
+            </button>
+            @if (productOpen) {
+            <div class="sub-menu nested-menu">
+                <!--
+                <a mat-list-item routerLink="/products/business" routerLinkActive="active">
+                    <mat-icon matListItemIcon>business</mat-icon>
+                    <span matListItemTitle>Business</span>
+                </a>
+            -->
+                <a mat-list-item routerLink="/products/personal" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Products Management</span>
+                </a>
+            </div>
+            }
+            <button mat-list-item class="nav-parent" [class.is-open]="transactionsOpen" type="button"
+                (click)="toggleTransactions()">
+                <mat-icon matListItemIcon>sync</mat-icon>
+                <span matListItemTitle>Transactions</span>
+                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> -->
+            </button>
+            @if (transactionsOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/transactions" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Transactions</span>
+                </a>
+
+            </div>
+            }<!--
+            <button mat-list-item class="nav-parent" [class.is-open]="channelsOpen" type="button"
+                (click)="toggleChannels()">
+                <mat-icon matListItemIcon>analytics</mat-icon>
+                <span matListItemTitle>Channels</span>
+                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> 
+            </button>-->
+            @if (channelsOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/channelsList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Channels</span>
+                </a>
+
+            </div>
+            }
+            <!--
+            <button mat-list-item class="nav-parent" [class.is-open]="branchOpen" type="button"
+                (click)="toggleBranch()">
+                <mat-icon matListItemIcon>analytics</mat-icon>
+                <span matListItemTitle>Branch</span>
+                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> 
+            </button>
+            @if (branchOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/branchList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Branches</span>
+                </a>
+
+            </div>
+            }-->
+            <button mat-list-item class="nav-parent" [class.is-open]="usersOpen" type="button" (click)="toggleUsers()">
+                <mat-icon matListItemIcon>analytics</mat-icon>
+                <span matListItemTitle>Users</span>
+                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> -->
+            </button>
+            @if (usersOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/usersList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Users</span>
+                </a>
+
+            </div>
+            }
+            <button mat-list-item class="nav-parent" [class.is-open]="financeOpen" type="button"
+                (click)="toggleFinance()">
+                <mat-icon matListItemIcon>payments</mat-icon>
+                <span matListItemTitle>Finance</span>
+            </button>
+            @if (financeOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/paybillsList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Paybills</span>
+                </a>
+
+            </div>
+            }
+            <button mat-list-item class="nav-parent" [class.is-open]="agentsOpen" type="button"
+                (click)="toggleAgents()">
+                <mat-icon matListItemIcon>support_agent</mat-icon>
+                <span matListItemTitle>Agents</span>
+            </button>
+            @if (agentsOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/agentsList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Agents</span>
+                </a>
+
+            </div>
+            }
+            <button mat-list-item class="nav-parent" [class.is-open]="membersOpen" type="button"
+                (click)="toggleMembers()">
+                <mat-icon matListItemIcon>group</mat-icon>
+                <span matListItemTitle>Members</span>
+            </button>
+            @if (membersOpen) {
+            <div class="sub-menu nested-menu">
+                <a mat-list-item routerLink="/membersList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Members</span>
+                </a>
+
+            </div>
+            }
+            }
+        </mat-nav-list>
+    </div>
+</div>

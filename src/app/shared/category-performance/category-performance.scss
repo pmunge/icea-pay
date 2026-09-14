@@ -1,0 +1,269 @@
+.dashboard {
+  padding-bottom: 0;
+  color: var(--app-navy);
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 500;
+  }
+
+  p {
+    margin-top: 6px;
+    color: var(--app-muted);
+    font-size: 14px;
+  }
+}
+
+.dash-window {
+  margin: 0 0 16px;
+  font-size: 12px;
+  color: var(--app-muted);
+}
+
+.period {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.period__label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--app-muted);
+}
+
+.period__select {
+  appearance: none;
+  min-width: 160px;
+  padding: 9px 34px 9px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--app-navy);
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23003c7a' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  border: 1px solid var(--app-line);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(13 26 99 / 6%);
+  cursor: pointer;
+}
+
+.period__select:focus-visible {
+  outline: 2px solid var(--app-blue);
+  outline-offset: 1px;
+}
+
+
+/* SUMMARY CARDS */
+
+.summary-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, 1fr);
+
+  gap: 14px;
+
+  margin-bottom: 16px;
+}
+
+.summary-card {
+  border-radius: 8px;
+  border-top: 4px solid var(--app-navy);
+  box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+
+  &:nth-child(2) {
+    border-top-color: var(--app-indigo);
+  }
+
+  &:nth-child(3) {
+    border-top-color: var(--app-blue);
+  }
+
+  &:nth-child(4) {
+    border-top-color: var(--app-coral);
+  }
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+
+  margin-bottom: 8px;
+}
+
+.customer-count {
+  font-size: 26px;
+  font-weight: 600;
+
+  color: var(--app-blue);
+}
+
+.customer-label {
+  font-size: 12px;
+  color: #888;
+}
+
+.income {
+  margin-top: 10px;
+
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.income-label {
+  font-size: 11px;
+  color: #999;
+}
+
+
+/* ANALYTICS */
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(410px, 0.8fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.charts-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.income-card {
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+}
+
+.line-chart {
+  height: 214px;
+  margin-top: 10px;
+}
+
+
+.sub-product-section {
+  min-width: 0;
+}
+
+/* SECTION */
+
+.section-title {
+  margin-bottom: 10px;
+
+  h2 {
+    margin: 0;
+
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  p {
+    margin-top: 5px;
+
+    color: var(--app-muted);
+    font-size: 13px;
+  }
+}
+
+
+/* PIE CHARTS */
+
+.pie-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.pie-card {
+  border-radius: 8px;
+  box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
+}
+
+.pie-chart {
+  height: 145px;
+  margin-top: 4px;
+}
+
+.pie-card mat-card-header {
+  padding: 12px 12px 0;
+}
+
+.pie-card mat-card-content {
+  padding: 0 8px 8px;
+}
+
+.pie-card mat-card-title {
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.pie-card mat-card-subtitle {
+  font-size: 11px;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+
+  .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .line-chart {
+    height: 300px;
+  }
+
+  .summary-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .summary-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .pie-grid {
+    grid-template-columns:
+      1fr;
+  }
+
+  .pie-chart {
+    height: 240px;
+  }
+
+}
+
+@media (max-width: 560px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .period,
+  .period__select {
+    width: 100%;
+  }
+}

@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>
+    Update Agent Status
+</h2>
+<mat-dialog-content>
+    <form [formGroup]="updateForm" class="update-form">
+        <p class="agent-summary">
+            <span>{{ agent.name }}</span> &middot; Agent ID {{ agent.agentId }}
+        </p>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Status
+            </mat-label>
+            <mat-select formControlName="status">
+                <mat-option value="Active">
+                    Active
+                </mat-option>
+                <mat-option value="Inactive">
+                    Inactive
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">
+        Cancel
+    </button>
+    <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="save()">
+        {{ saving ? 'Saving…' : 'Update Status' }}
+    </button>
+</mat-dialog-actions>

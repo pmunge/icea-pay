@@ -1,0 +1,40 @@
+.layout-container {
+  height: 100vh;
+  background: var(--app-surface);
+}
+
+.sidebar {
+  width: 250px;
+  border-right: none;
+  border-radius: 0;
+}
+
+.toolbar {
+  height: 64px;
+  padding: 0 20px;
+  background: #281C59;
+  color: white;
+}
+
+.toolbar button,
+.toolbar .mat-icon,
+.toolbar .mat-mdc-icon-button {
+  color: white;
+}
+
+.toolbar-title {
+  margin-left: 12px;
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+}
+
+.toolbar-spacer {
+  flex: 1;
+}
+
+.page-content {
+  padding: 14px 20px;
+  min-height: calc(100vh - 64px);
+  box-sizing: border-box;
+}

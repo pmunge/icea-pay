@@ -1,0 +1,13 @@
+<div class="unauthorized-page">
+  <mat-icon class="unauthorized-icon">lock</mat-icon>
+  <h1>Access denied</h1>
+  <p>You don't have permission to view this dashboard.</p>
+  <div class="unauthorized-actions">
+    <button mat-flat-button color="primary" type="button" (click)="goHome()">
+      Go to my dashboard
+    </button>
+    <button mat-button type="button" (click)="logout()">
+      Sign in as a different user
+    </button>
+  </div>
+</div>

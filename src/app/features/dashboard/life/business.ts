@@ -1,0 +1,27 @@
+import { Component, inject } from '@angular/core';
+
+import { CategoryPerformance } from '../../../shared/category-performance/category-performance';
+import { TransactionsTable } from '../../../shared/transactions-table/transactions-table';
+
+import { lifeDashboardData } from '../../../core/data/category-performance-data';
+import { applyScope } from '../../../core/data/dashboard-analytics';
+import { AnalyticsService } from '../../../core/services/analytics';
+
+
+@Component({
+  selector: 'app-business-product-performance',
+  imports: [CategoryPerformance, TransactionsTable],
+  template: `
+    <app-category-performance [data]="data" [transactions]="allTransactions" [businessUnit]="'Life'" />
+    <app-transactions-table [transactions]="transactions" />
+  `
+})
+export class Business {
+
+  data = lifeDashboardData;
+
+  allTransactions = inject(AnalyticsService).getTransactions();
+
+  transactions = applyScope(this.allTransactions, { businessUnit: 'Life' });
+
+}

@@ -1,0 +1,39 @@
+<mat-sidenav-container class="layout-container">
+    <!--sidebar-->
+    <mat-sidenav #sidenav mode="side" opened class="sidebar">
+        <app-sidebar></app-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar class="toolbar">
+            <button mat-icon-button (click)="sidenav.toggle()" aria-label="Toggle side bar">
+                <mat-icon>menu</mat-icon>
+            </button>
+            <span class="toolbar-title">
+                ICEA PAY
+            </span>
+            <span class="toolbar-spacer"></span>
+            <button mat-icon-button>
+                <mat-icon>notifications</mat-icon>
+            </button>
+
+            <button mat-icon-button [matMenuTriggerFor]="accountMenu" aria-label="Account menu">
+                <mat-icon>account_circle</mat-icon>
+            </button>
+            <mat-menu #accountMenu="matMenu">
+                @if (user(); as u) {
+                <div class="account-info" mat-menu-item disabled>
+                    {{ u.username }} · {{ u.role }}
+                </div>
+                }
+                <button mat-menu-item type="button" (click)="logout()">
+                    <mat-icon>logout</mat-icon>
+                    <span>Sign out</span>
+                </button>
+            </mat-menu>
+        </mat-toolbar>
+        <main class="page-content">
+            <app-breadcrumbs></app-breadcrumbs>
+            <router-outlet></router-outlet>
+        </main>
+    </mat-sidenav-content>
+</mat-sidenav-container>

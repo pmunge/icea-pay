@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>
+    Create Channel
+</h2>
+<mat-dialog-content>
+    <form [formGroup]="channelForm" class="product-form">
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Channel Name
+            </mat-label>
+            <input matInput formControlName="name" placeholder="Enter product name"> @if (
+            channelForm.controls.name.hasError('required')
+            ) {
+            <mat-error>
+                Product name is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+
+            <mat-label>
+                Category
+            </mat-label>
+
+            <mat-select formControlName="category">
+
+                @for (
+                category of categories;
+                track category
+                ) {
+                <mat-option [value]="category">
+                    {{ category }}
+                </mat-option>
+                }
+            </mat-select>
+            @if (
+            channelForm.controls.category.hasError('required')
+            ) {
+
+            <mat-error>
+                Please select a category
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+
+            <mat-label>
+                Description
+            </mat-label>
+
+            <textarea matInput rows="4" formControlName="description" placeholder="Enter product description">
+      </textarea>
+            @if (
+            channelForm.controls.description.hasError('required')
+            ) {
+            <mat-error>
+                Description is required
+            </mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Status
+            </mat-label>
+            <mat-select formControlName="status">
+                <mat-option value="Active">
+                    Active
+                </mat-option>
+                <mat-option value="Inactive">
+                    Inactive
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">
+        Cancel
+    </button>
+    <button mat-flat-button color="primary" type="button" (click)="save()">
+        Create Channel
+    </button>
+</mat-dialog-actions>

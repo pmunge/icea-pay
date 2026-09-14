@@ -1,0 +1,108 @@
+<h2 mat-dialog-title>
+  Create Branch
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="branchForm" class="product-form">
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Branch Name
+      </mat-label>
+      <input matInput formControlName="name" placeholder="Enter branch name"> @if (
+      branchForm.controls.name.hasError('required')
+      ) {
+      <mat-error>
+        Branch name is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Code
+      </mat-label>
+      <input matInput formControlName="code" placeholder="Enter  Branch Code "> @if (
+      branchForm.controls.code.hasError('required')
+      ) {
+      <mat-error>
+        Code is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Manager
+      </mat-label>
+      <input matInput formControlName="manager" placeholder="Enter Branch Manager "> @if (
+      branchForm.controls.manager.hasError('required')
+      ) {
+      <mat-error>
+        Manager is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        County
+      </mat-label>
+      <input matInput formControlName="county" placeholder="Enter Branch location"> @if (
+      branchForm.controls.county.hasError('required')
+      ) {
+      <mat-error>
+        County is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Town
+      </mat-label>
+
+      <textarea matInput rows="4" formControlName="town" placeholder="Enter Branch Town">
+      </textarea>
+      @if (
+      branchForm.controls.town.hasError('required')
+      ) {
+      <mat-error>
+        Town is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Phone
+      </mat-label>
+
+      <textarea matInput rows="4" formControlName="phone" placeholder="Enter Branch Phone Number">
+      </textarea>
+      @if (
+      branchForm.controls.phone.hasError('required')
+      ) {
+      <mat-error>
+        Phone is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Status
+      </mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Active">
+          Active
+        </mat-option>
+        <mat-option value="Inactive">
+          Inactive
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">
+    Create Branch
+  </button>
+</mat-dialog-actions>

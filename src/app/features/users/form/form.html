@@ -1,0 +1,139 @@
+<h2 mat-dialog-title>
+  Create a New User
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="usersForm" class="product-form">
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Users Name
+      </mat-label>
+      <input matInput formControlName="fname" placeholder="Enter Users name"> @if (
+      usersForm.controls.fname.hasError('required')
+      ) {
+      <mat-error>
+        Users name is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Users Surname
+      </mat-label>
+      <input matInput formControlName="lname" placeholder="Enter Users surname"> @if (
+      usersForm.controls.lname.hasError('required')
+      ) {
+      <mat-error>
+        Users Surname is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Business Unit
+      </mat-label>
+      <mat-select formControlName="branch" placeholder="Select a business unit">
+        @for (unit of businessUnits; track unit) {
+        <mat-option [value]="unit">
+          {{ unit }}
+        </mat-option>
+        }
+      </mat-select>
+      @if (
+      usersForm.controls.branch.hasError('required')
+      ) {
+      <mat-error>
+        Business unit is required
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Department
+      </mat-label>
+      <input matInput formControlName="department" placeholder="Enter department"> @if (
+      usersForm.controls.department.hasError('required')
+      ) {
+      <mat-error>
+        Department is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Email
+      </mat-label>
+      <input matInput formControlName="email" placeholder="Enter email"> @if (
+      usersForm.controls.email.hasError('required')
+      ) {
+      <mat-error>
+        Email is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Phone
+      </mat-label>
+      <input matInput formControlName="phone" placeholder="Enter phone"> @if (
+      usersForm.controls.phone.hasError('required')
+      ) {
+      <mat-error>
+        Phone is required
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Role
+      </mat-label>
+      <mat-select formControlName="role">
+        <mat-option value="HQ">
+          HQ
+        </mat-option>
+        <mat-option value="GENERAL">
+          General
+        </mat-option>
+        <mat-option value="LIFE">
+          Life
+        </mat-option>
+        <mat-option value="MEDICAL">
+          Medical
+        </mat-option>
+        <mat-option value="INVEST">
+          Investment
+        </mat-option>
+      </mat-select>
+      @if (
+      usersForm.controls.role.hasError('required')
+      ) {
+      <mat-error>
+        Role is required
+      </mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Status
+      </mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Active">
+          Active
+        </mat-option>
+        <mat-option value="Inactive">
+          Inactive
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">
+    Create Channel
+  </button>
+</mat-dialog-actions>

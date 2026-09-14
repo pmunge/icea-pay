@@ -1,0 +1,124 @@
+<h2 mat-dialog-title>
+  Create Product
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="productForm" class="product-form">
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Product Code
+      </mat-label>
+      <input matInput formControlName="code" placeholder="Enter product code"> @if (
+      productForm.controls.code.hasError('required')
+      ) {
+      <mat-error>
+        Product code is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Product Name
+      </mat-label>
+      <input matInput formControlName="name" placeholder="Enter product name"> @if (
+      productForm.controls.name.hasError('required')
+      ) {
+      <mat-error>
+        Product name is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Business Unit
+      </mat-label>
+
+      <mat-select formControlName="businessUnit">
+
+        @for (
+        category of categories;
+        track category
+        ) {
+        <mat-option [value]="category">
+          {{ category }}
+        </mat-option>
+        }
+      </mat-select>
+      @if (
+      productForm.controls.businessUnit.hasError('required')
+      ) {
+
+      <mat-error>
+        Please select a business unit
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Paybill
+      </mat-label>
+      <input matInput formControlName="paybill" placeholder="Enter paybill "> @if (
+      productForm.controls.paybill.hasError('required')
+      ) {
+      <mat-error>
+        Paybill is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Account Number
+      </mat-label>
+      <input matInput formControlName="accountNumber" placeholder="Enter account number "> @if (
+      productForm.controls.accountNumber.hasError('required')
+      ) {
+      <mat-error>
+        Account number is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+
+      <mat-label>
+        Description
+      </mat-label>
+
+      <textarea matInput rows="4" formControlName="description" placeholder="Enter product description">
+      </textarea>
+      @if (
+      productForm.controls.description.hasError('required')
+      ) {
+      <mat-error>
+        Description is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Display Order
+      </mat-label>
+      <input matInput type="number" formControlName="displayOrder" placeholder="Enter display order">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Status
+      </mat-label>
+      <mat-select formControlName="status">
+        <mat-option value="Active">
+          Active
+        </mat-option>
+        <mat-option value="Inactive">
+          Inactive
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" type="button" (click)="save()">
+    Create Product
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,37 @@
+.breadcrumb-container {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 12px;
+
+  font-size: 13px;
+}
+
+.home-link {
+  display: flex;
+  align-items: center;
+
+  color: #777;
+  text-decoration: none;
+}
+
+.home-link mat-icon {
+  font-size: 18px;
+}
+
+.separator {
+  margin: 0 6px;
+
+  font-size: 18px;
+  color: #aaa;
+}
+
+.breadcrumb-link {
+  color: #777;
+  text-decoration: none;
+}
+
+.breadcrumb-link:last-child {
+  color: var(--app-blue);
+  font-weight: 500;
+}

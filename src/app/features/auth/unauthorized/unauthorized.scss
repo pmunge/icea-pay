@@ -1,0 +1,25 @@
+.unauthorized-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px;
+  gap: 8px;
+  background: #f0f4f8;
+}
+
+.unauthorized-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+  color: #b00020;
+}
+
+.unauthorized-actions {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

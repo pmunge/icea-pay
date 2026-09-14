@@ -1,0 +1,535 @@
+{
+  "products": [
+    {
+      "id": "2",
+      "name": "Whole of Life",
+      "category": "Life",
+      "description": "Long-term life insurance protection",
+      "paybill": "337337",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "3",
+      "name": "Term Assurance",
+      "category": "Life",
+      "description": "Life protection for a specified period",
+      "paybill": "337337",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "4",
+      "name": "Money Market Fund (MMF)",
+      "category": "Investment",
+      "description": "Investment through a money market fund",
+      "paybill": "445566",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "5",
+      "name": "Equity Fund",
+      "category": "Investment",
+      "description": "Investment in equity markets",
+      "paybill": "445566",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "6",
+      "name": "Motor Insurance",
+      "category": "General",
+      "description": "Insurance protection for motor vehicles",
+      "paybill": "778899",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "7",
+      "name": "Travel Insurance",
+      "category": "General",
+      "description": "Protection for travel-related risks",
+      "paybill": "778899",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "8",
+      "name": "Home / Domestic Insurance",
+      "category": "General",
+      "description": "Protection for homes and domestic assets",
+      "paybill": "778899",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "9",
+      "name": "BizBora SME Package",
+      "category": "General",
+      "description": "Insurance solution for small and medium businesses",
+      "paybill": "778899",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "10",
+      "name": "Individual Medical Cover",
+      "category": "Medical",
+      "description": "Medical insurance cover for individuals",
+      "paybill": "200200",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "11",
+      "name": "Family Healthcare Plan",
+      "category": "Medical",
+      "description": "Healthcare protection for families",
+      "paybill": "200200",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "12",
+      "name": "Senior Citizens Health",
+      "category": "Medical",
+      "description": "Healthcare cover designed for senior citizens",
+      "paybill": "200200",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "id": "13",
+      "name": "Corporate & Group Medical Cover",
+      "category": "Medical",
+      "description": "Medical protection for corporate and group members",
+      "paybill": "200200",
+      "status": "Active",
+      "type": "personal"
+    },
+    {
+      "name": "mmf",
+      "category": "Investment",
+      "paybill": "337338",
+      "description": "Long-term life protection and savings solution",
+      "status": "Active",
+      "id": "14"
+    },
+    {
+      "name": "not whole",
+      "category": "Investment",
+      "paybill": "337338",
+      "description": "Long-term life insurance protection",
+      "status": "Active",
+      "id": "15"
+    },
+    {
+      "name": "Fixed Income Funr",
+      "category": "General",
+      "paybill": "445566",
+      "description": "Investment in fixed income securities",
+      "status": "Active",
+      "id": "16"
+    },
+    {
+      "id": "18",
+      "name": "InvestSure",
+      "category": "Life",
+      "description": "Insurance protection for business motor vehicles",
+      "paybill": "778856",
+      "status": "Active",
+      "type": "business"
+    },
+    {
+      "id": "19",
+      "name": "BizBora SME Package",
+      "category": "General",
+      "description": "Insurance solution for small and medium businesses",
+      "paybill": "778899",
+      "status": "Active",
+      "type": "business"
+    },
+    {
+      "id": "20",
+      "name": "Travel Insurance",
+      "category": "General",
+      "description": "Travel protection for business and corporate clients",
+      "paybill": "778899",
+      "status": "Active",
+      "type": "business"
+    },
+    {
+      "id": "21",
+      "name": "Corporate & Group Medical Cover",
+      "category": "Medical",
+      "description": "Medical protection for corporate and group members",
+      "paybill": "200200",
+      "status": "Active",
+      "type": "business"
+    },
+    {
+      "name": "InvestSure",
+      "category": "Life",
+      "paybill": "3337777",
+      "description": "ghjkl;dghjkl;dghjk",
+      "status": "Active",
+      "id": "UivsIeW4rMM"
+    },
+    {
+      "name": "sadghjkl;",
+      "category": "Life",
+      "paybill": "3245678",
+      "description": "rtyhjkl;",
+      "status": "Active",
+      "id": "0J_vbjdQcnA"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1",
+      "customerId": "Joan Nyakio",
+      "productId": 1,
+      "account": "INSURE-001",
+      "channel": "NCBA",
+      "amount": 1000,
+      "date": "2024-01-01",
+      "type": "credit"
+    },
+    {
+      "id": "2",
+      "customerId": "Brian Otieno",
+      "productId": 2,
+      "account": "INSURE-002",
+      "channel": "MPESA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "3",
+      "customerId": "Mercy Wanjiku",
+      "productId": 4,
+      "account": "INSURE-004",
+      "channel": "MPESA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "4",
+      "customerId": "Kevin Mwangi",
+      "productId": 5,
+      "account": "INSURE-005",
+      "channel": "MPESA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "5",
+      "customerId": "Faith Akinyi",
+      "productId": 2,
+      "account": "INSURE-002",
+      "channel": "MPESA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "6",
+      "customerId": "Dennis Kamau",
+      "productId": 1,
+      "account": "INSURE-001",
+      "channel": "AIRTEL MONEY",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "7",
+      "customerId": "Cynthia Wambui",
+      "productId": 5,
+      "account": "INSURE-005",
+      "channel": "AIRTEL MONEY",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "8",
+      "customerId": "Samuel Kiptoo",
+      "productId": 7,
+      "account": "INSURE-007",
+      "channel": "MPESA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "9",
+      "customerId": "Esther Njeri",
+      "productId": 1,
+      "account": "INSURE-001",
+      "channel": "MPESA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "10",
+      "customerId": "James Kariuki",
+      "productId": "P3",
+      "account": "INSURE-003",
+      "channel": "CASH",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "11",
+      "customerId": "Ann Wairimu",
+      "productId": "P13",
+      "account": "INSURE-013",
+      "channel": "CASH",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "12",
+      "customerId": "Peter Ochieng",
+      "productId": "P21",
+      "account": "INSURE-021",
+      "channel": "CASH",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "13",
+      "customerId": "Lucy Muthoni",
+      "productId": "P13",
+      "account": "INSURE-013",
+      "channel": "NCBA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "14",
+      "customerId": "Daniel Maina",
+      "productId": "P2",
+      "account": "INSURE-002",
+      "channel": "NCBA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "15",
+      "customerId": "Grace Atieno",
+      "productId": "P11",
+      "account": "INSURE-011",
+      "channel": "NCBA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    },
+    {
+      "id": "16",
+      "customerId": "Michael Kibet",
+      "productId": "P13",
+      "account": "INSURE-013",
+      "channel": "NCBA",
+      "amount": 500,
+      "date": "2024-01-02",
+      "type": "debit"
+    }
+  ],
+  "channels": [
+    {
+      "id": "1",
+      "name": "NCBA",
+      "description": "Access your insurance products through banks",
+      "category": "Banking",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "name": "Airtel Money",
+      "description": "Manage your insurance policies using mobile money.",
+      "category": "Mobile Money Transfer",
+      "status": "Active"
+    },
+    {
+      "id": "3",
+      "name": "Safaricom M-Pesa",
+      "description": "Use Mpesa",
+      "category": "Mobile Money Transfer",
+      "status": "Active"
+    },
+    {
+      "name": "telcom",
+      "category": "Mobile Money Transfer",
+      "description": "transfer money ",
+      "status": "Inactive",
+      "id": "b0NKT5-A3Dc"
+    }
+  ],
+  "branches": [
+    {
+      "id": "1",
+      "name": "Nairobi CBD Branch",
+      "code": "BR-001",
+      "manager": "Grace Wanjiru",
+      "county": "Nairobi",
+      "town": "Nairobi",
+      "phone": "0709100001",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "name": "Mombasa Branch",
+      "code": "BR-002",
+      "manager": "Ali Hassan",
+      "county": "Mombasa",
+      "town": "Mombasa",
+      "phone": "0709100002",
+      "status": "Active"
+    },
+    {
+      "id": "3",
+      "name": "Kisumu Branch",
+      "code": "BR-003",
+      "manager": "Peter Otieno",
+      "county": "Kisumu",
+      "town": "Kisumu",
+      "phone": "0709100003",
+      "status": "Active"
+    },
+    {
+      "id": "4",
+      "name": "Nakuru Branch",
+      "code": "BR-004",
+      "manager": "Mary Njeri",
+      "county": "Nakuru",
+      "town": "Nakuru",
+      "phone": "0709100004",
+      "status": "Inactive"
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "type": "business",
+      "fname": "Hilda",
+      "lname": "Kimani",
+      "branch": "Nairobi",
+      "department": "Finance",
+      "email": "hq@icea.com",
+      "phone": "0700000001",
+      "role": "HQ",
+      "password": "Head123",
+      "status": "Active"
+    },
+    {
+      "id": "2",
+      "type": "business",
+      "fname": "Brian",
+      "lname": "Otieno",
+      "branch": "Life",
+      "department": "Marketing",
+      "email": "branch@icea.com",
+      "phone": "0700000002",
+      "role": "LIFE",
+      "password": "Branch123",
+      "status": "Active"
+    },
+    {
+      "id": "5",
+      "type": "business",
+      "fname": "Wanjiru",
+      "lname": "Kamande",
+      "branch": "General",
+      "department": "Underwriting",
+      "email": "general@icea.com",
+      "phone": "0700000005",
+      "role": "GENERAL",
+      "password": "General123",
+      "status": "Active"
+    },
+    {
+      "fname": "Prudence",
+      "lname": "Munge",
+      "branch": "Investment",
+      "department": "IT",
+      "email": "prudy@icea.com",
+      "phone": "0745780921",
+      "role": "INVEST",
+      "status": "Active",
+      "type": "business",
+      "password": "Admin123",
+      "id": "TjTOkv8-FMQ"
+    },
+    {
+      "fname": "Joe",
+      "lname": "Em",
+      "department": "Marketing",
+      "email": "em@icea.com",
+      "phone": "0726550588",
+      "password": "joe123",
+      "status": "Inactive",
+      "branch": "Medical",
+      "role": "MEDICAL",
+      "type": "business",
+      "id": "JnWkbQge5I8"
+    }
+  ],
+  "otps": [
+    {
+      "otp": "otp-001",
+      "userId": "JnWkbQge5I8",
+      "expiresAt": "2026-09-10T20:15:00.000Z",
+      "attempts": 0,
+      "verified": "false",
+      "id": "crtJfV4Yx9I"
+    },
+    {
+      "otp": "otp-002",
+      "userId": "JnWkbQge5I8",
+      "expiresAt": "2026-09-10T20:15:00.000Z",
+      "attempts": 0,
+      "verified": "false",
+      "id": "ByZ_fxy9lo8"
+    },
+    {
+      "otp": "otp-003",
+      "userId": "JnWkbQge5I8",
+      "expiresAt": "2026-09-10T20:15:00.000Z",
+      "attempts": 0,
+      "verified": "false",
+      "id": "VCcRsnKB33Y"
+    }
+  ],
+  "paybills": [
+    {
+      "MoMo": "MPESA",
+      "paybill": "345678",
+      "status": "Active",
+      "amount": 10003,
+      "id": "omW4SuvuhFA"
+    }
+  ],
+  "members": [
+    {
+      "id": "pmM4SuvuhFE",
+      "name": "Ann Ann",
+      "nationalId": "34780954",
+      "phone": "0723467098",
+      "status": "Active"
+    }
+  ],
+  "agents": [],
+  "$schema": "./node_modules/json-server/schema.json"
+}
