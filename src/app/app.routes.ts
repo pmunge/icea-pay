@@ -210,6 +210,28 @@ export const routes: Routes = [
                 }
             },
             {
+                path: 'paybillAllocateList',
+                canActivate: [roleGuard('HQ')],
+                loadComponent: () =>
+                    import(
+                        './features/finance/allocate-paybill-list/allocate-paybill-list'
+                    ).then(m => m.AllocatePaybillList),
+                data: {
+                    breadcrumb: 'Allocate Paybills'
+                }
+            },
+            {
+                path: 'paybillWithdrawList',
+                canActivate: [roleGuard('HQ')],
+                loadComponent: () =>
+                    import(
+                        './features/finance/withdraw/withdraw'
+                    ).then(m => m.Withdraw),
+                data: {
+                    breadcrumb: 'Withdraw Paybills'
+                }
+            },
+            {
                 path: 'agentsList',
                 canActivate: [roleGuard('HQ')],
                 loadComponent: () =>
@@ -229,6 +251,39 @@ export const routes: Routes = [
                     ).then(m => m.List),
                 data: {
                     breadcrumb: 'Members'
+                }
+            },
+            {
+                path: 'profilesList',
+                canActivate: [roleGuard('HQ')],
+                loadComponent: () =>
+                    import(
+                        './features/profiles/list/list'
+                    ).then(m => m.List),
+                data: {
+                    breadcrumb: 'Profiles'
+                }
+            },
+            {
+                path: 'rolesList',
+                canActivate: [roleGuard('HQ')],
+                loadComponent: () =>
+                    import(
+                        './features/roles/list/list'
+                    ).then(m => m.List),
+                data: {
+                    breadcrumb: 'Roles'
+                }
+            },
+            {
+                path: 'permissionsList',
+                canActivate: [roleGuard('HQ')],
+                loadComponent: () =>
+                    import(
+                        './features/permissions/list/list'
+                    ).then(m => m.List),
+                data: {
+                    breadcrumb: 'Permissions'
                 }
             }
 

@@ -1,0 +1,30 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Permissions</h1>
+      <p>Manage the permissions assigned to roles across the portal.</p>
+    </div>
+  </header>
+  <mat-card class="product-card">
+    <mat-form-field appearance="outline" class="search-field"><mat-label>Search permissions</mat-label><input matInput
+        [(ngModel)]="searchTerm" (ngModelChange)="applySearch()" placeholder="Permission or role name"><mat-icon
+        matSuffix>search</mat-icon></mat-form-field>
+    <div class="table-container">
+      <table mat-table [dataSource]="pagedPermissions" class="product-table">
+        <ng-container matColumnDef="permission">
+          <th mat-header-cell *matHeaderCellDef>Permission</th>
+          <td mat-cell *matCellDef="let permission"><strong>{{ permission.permission }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let permission">{{ roleName(permission.roleId) }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>@if (!filteredPermissions.length) { <div class="empty-state">No permissions match your search.</div> }
+    </div>
+    <mat-paginator [length]="filteredPermissions.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)"
+      aria-label="Permissions pagination"></mat-paginator>
+  </mat-card>
+</section>

@@ -6,13 +6,30 @@ export type PaybillProvider = typeof PAYBILL_PROVIDERS[number];
 export interface PaybillRequest {
     paybillNumber: string;
     provider: string;
-    businessLineId: number;
 }
 
 export interface Paybill extends PaybillRequest {
     id?: number;
-    /** Defaults to 0 on creation; can be set on update. */
+    /** Set once the paybill has been allocated to a business line and product. */
+    businessLineId?: number;
+    product?: string;
+    /** Current balance held on the paybill. Defaults to 0 on creation. */
     amount?: number;
     createdAt?: string;
     updatedAt?: string;
+}
+
+/** Payload sent to POST /paybills/{id}/allocate to assign a business line and product to a paybill. */
+export interface PaybillAllocate {
+    paybillNumber: string;
+    provider: string;
+    businessLineId: number;
+    product: string;
+}
+
+export interface withdrawPaybill {
+    paybillNumber: string;
+    provider: string;
+    currentAmount: string;
+    adjustAmount: string;
 }

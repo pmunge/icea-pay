@@ -1,1 +1,30 @@
-<p>form works!</p>
+<h2 mat-dialog-title>
+  Create Role
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="rolesForm" class="role-form">
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Role Name
+      </mat-label>
+      <input matInput formControlName="role" placeholder="Enter role name">
+      @if (rolesForm.controls.role.hasError('required')) {
+      <mat-error>
+        Role name is required
+      </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" type="button" (click)="save()" [disabled]="saving">
+    @if (saving) {
+    <mat-progress-spinner diameter="18" mode="indeterminate"></mat-progress-spinner>
+    } @else {
+    Create Role
+    }
+  </button>
+</mat-dialog-actions>

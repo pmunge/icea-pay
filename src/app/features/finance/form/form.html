@@ -31,24 +31,6 @@
             </mat-error>
             }
         </mat-form-field>
-
-        <mat-form-field appearance="outline">
-            <mat-label>
-                Business Line
-            </mat-label>
-            <mat-select formControlName="businessLineId">
-                @for (line of businessLines(); track line.id) {
-                <mat-option [value]="line.id">
-                    {{ line.name }}
-                </mat-option>
-                }
-            </mat-select>
-            @if (paybillsForm.controls.businessLineId.hasError('required')) {
-            <mat-error>
-                Business line is required
-            </mat-error>
-            }
-        </mat-form-field>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

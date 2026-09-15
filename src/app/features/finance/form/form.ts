@@ -14,11 +14,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
-import { BusinessLine } from '../../../core/models/business-line';
 import { PAYBILL_PROVIDERS } from '../../../core/models/paybills';
-import { BusinessLineService } from '../../../core/services/business-line-service';
 import { FinanceService } from '../../../core/services/finance-service';
-
+//import products
 
 @Component({
   selector: 'app-paybill-form',
@@ -38,18 +36,16 @@ import { FinanceService } from '../../../core/services/finance-service';
 
   styleUrl: './form.scss'
 })
-export class Form implements OnInit {
+export class Form {
 
   private fb = inject(FormBuilder);
 
   private financeService = inject(FinanceService);
 
-  private businessLineService = inject(BusinessLineService);
 
   private dialogRef =
     inject(MatDialogRef<Form>);
 
-  readonly businessLines = signal<BusinessLine[]>([]);
 
   readonly providers = PAYBILL_PROVIDERS;
 
@@ -64,18 +60,9 @@ export class Form implements OnInit {
       '',
       Validators.required
     ],
-    businessLineId: [
-      null as number | null,
-      Validators.required
-    ]
+
   });
 
-  ngOnInit(): void {
-    this.businessLineService.getBusinessLines().subscribe({
-      next: (businessLines) => this.businessLines.set(businessLines),
-      error: (error) => console.error('Failed to load business lines', error)
-    });
-  }
 
   save(): void {
     if (this.paybillsForm.invalid) {
@@ -83,11 +70,11 @@ export class Form implements OnInit {
       return;
     }
 
-    const { paybillNumber, provider, businessLineId } = this.paybillsForm.getRawValue();
+    const { paybillNumber, provider } = this.paybillsForm.getRawValue();
     this.saving = true;
 
     this.financeService
-      .createPaybill({ paybillNumber, provider, businessLineId: businessLineId! })
+      .createPaybill({ paybillNumber, provider })
       .pipe(finalize(() => this.saving = false))
       .subscribe({
         next: (createdPaybill) => {

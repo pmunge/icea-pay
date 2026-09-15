@@ -21,6 +21,15 @@ export class ConfirmationService {
     });
   }
 
+  confirmWithdraw(itemLabel: string, amount: string): Promise<boolean> {
+    return this.confirm({
+      title: 'Confirm withdrawal',
+      text: `Withdraw ${amount} from ${itemLabel}?`,
+      confirmButtonText: 'Yes, withdraw',
+      icon: 'warning'
+    });
+  }
+
   private confirm(options: {
     title: string;
     text: string;

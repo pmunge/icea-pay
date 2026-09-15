@@ -149,9 +149,18 @@
                     <mat-icon matListItemIcon>list</mat-icon>
                     <span matListItemTitle> Portal Users</span>
                 </a>
+                <a mat-list-item routerLink="/profilesList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>list</mat-icon>
+                    <span matListItemTitle>Profiles</span>
+                </a>
+                <a mat-list-item routerLink="/permissionsList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>key</mat-icon>
+                    <span matListItemTitle>Permissions</span>
+                </a>
 
             </div>
             }
+
             <button mat-list-item class="nav-parent" [class.is-open]="financeOpen" type="button"
                 (click)="toggleFinance()">
                 <mat-icon matListItemIcon>payments</mat-icon>
@@ -160,8 +169,16 @@
             @if (financeOpen) {
             <div class="sub-menu nested-menu">
                 <a mat-list-item routerLink="/paybillsList" routerLinkActive="active">
-                    <mat-icon matListItemIcon>list</mat-icon>
-                    <span matListItemTitle>Paybills</span>
+                    <mat-icon matListItemIcon>add</mat-icon>
+                    <span matListItemTitle>Paybill Create</span>
+                </a>
+                <a mat-list-item routerLink="/paybillAllocateList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>assignment_turned_in</mat-icon>
+                    <span matListItemTitle>Paybill Allocate</span>
+                </a>
+                <a mat-list-item routerLink="/paybillWithdrawList" routerLinkActive="active">
+                    <mat-icon matListItemIcon>payments</mat-icon>
+                    <span matListItemTitle>Paybill Withdraw</span>
                 </a>
 
             </div>

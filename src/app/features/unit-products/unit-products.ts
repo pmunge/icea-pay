@@ -62,7 +62,7 @@ export class UnitProducts implements OnInit {
     return !term
       ? this.products
       : this.products.filter(product =>
-        [product.name, product.paybill, product.description, this.statusOf(product)]
+        [product.name, this.statusOf(product)]
           .some(value => value.toLowerCase().includes(term)));
   }
 

@@ -18,19 +18,10 @@
         </ng-container><ng-container matColumnDef="businessUnit">
           <th mat-header-cell *matHeaderCellDef>Business Unit</th>
           <td mat-cell *matCellDef="let product">{{ unitOf(product) }}</td>
-        <!--</ng-container><ng-container matColumnDef="paybill">
-          <th mat-header-cell *matHeaderCellDef>Paybill</th>
-          <td mat-cell *matCellDef="let product">{{ product.paybill }}</td>
-        </ng-container><ng-container matColumnDef="accountNumber">
-          <th mat-header-cell *matHeaderCellDef>Account</th>
-          <td mat-cell *matCellDef="let product">{{ product.accountNumber }}</td> -->
-        </ng-container><ng-container matColumnDef="description">
-          <th mat-header-cell *matHeaderCellDef>Description</th>
-          <td mat-cell *matCellDef="let product" class="description-cell">{{ product.description }}</td>
         </ng-container><ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Status</th>
-          <td mat-cell *matCellDef="let product"><span class="status"
-              [class.inactive]="!product.active">{{ statusOf(product) }}</span></td>
+          <td mat-cell *matCellDef="let product"><span class="status" [class.inactive]="!product.active">{{
+              statusOf(product) }}</span></td>
         </ng-container>
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Actions</th>

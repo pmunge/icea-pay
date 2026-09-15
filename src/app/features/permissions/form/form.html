@@ -1,0 +1,52 @@
+<h2 mat-dialog-title>
+  Create Permission
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="permissionsForm" class="permission-form">
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Permission Name
+      </mat-label>
+      <input matInput formControlName="permission" placeholder="Enter permission name">
+      @if (permissionsForm.controls.permission.hasError('required')) {
+      <mat-error>
+        Permission name is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Role
+      </mat-label>
+      <mat-select formControlName="roleId">
+        @for (role of roles(); track role.id) {
+        <mat-option [value]="role.id">
+          {{ role.role }}
+        </mat-option>
+        }
+      </mat-select>
+      @if (!roles().length) {
+      <mat-hint>
+        No roles available
+      </mat-hint>
+      }
+      @if (permissionsForm.controls.roleId.hasError('required')) {
+      <mat-error>
+        Role is required
+      </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" type="button" (click)="save()" [disabled]="saving">
+    @if (saving) {
+    <mat-progress-spinner diameter="18" mode="indeterminate"></mat-progress-spinner>
+    } @else {
+    Create Permission
+    }
+  </button>
+</mat-dialog-actions>

@@ -1,1 +1,26 @@
-<p>list works!</p>
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Roles</h1>
+      <p>Manage the roles available across the portal.</p>
+    </div><button mat-flat-button color="primary" type="button" (click)="openCreateDialog()"><mat-icon>add</mat-icon>Add
+      role</button>
+  </header>
+  <mat-card class="product-card">
+    <mat-form-field appearance="outline" class="search-field"><mat-label>Search roles</mat-label><input matInput
+        [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+        placeholder="Role name"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+    <div class="table-container">
+      <table mat-table [dataSource]="pagedRoles" class="product-table">
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let role"><strong>{{ role.role }}</strong></td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>@if (!filteredRoles.length) { <div class="empty-state">No roles match your search.</div> }
+    </div>
+    <mat-paginator [length]="filteredRoles.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)" aria-label="Roles pagination"></mat-paginator>
+  </mat-card>
+</section>

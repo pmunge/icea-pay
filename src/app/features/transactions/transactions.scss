@@ -101,9 +101,25 @@ tr.mat-mdc-row:hover {
     max-width: 360px;
 }
 
+.payment-pill,
 .status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 600;
+}
+
+.payment-pill.full,
+.status.complete {
+    background: #eaf7ef;
+    color: #198754;
+}
+
+.payment-pill.partial,
+.status.awaiting {
+    background: #fff1e6;
+    color: #fc4100;
 }
 
 .empty-state {

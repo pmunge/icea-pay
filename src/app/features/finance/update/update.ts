@@ -1,29 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators
 } from '@angular/forms';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef
 } from '@angular/material/dialog';
 
-import { BusinessLine } from '../../../core/models/business-line';
-import { PAYBILL_PROVIDERS, Paybill } from '../../../core/models/paybills';
-import { BusinessLineService } from '../../../core/services/business-line-service';
+import { Paybill } from '../../../core/models/paybills';
 import { FinanceService } from '../../../core/services/finance-service';
 import { ConfirmationService } from '../../../core/services/confirmation';
 
 @Component({
-  selector: 'app-paybill-update',
+  selector: 'app-paybill-withdraw',
 
   imports: [
     CommonModule,
@@ -31,7 +30,6 @@ import { ConfirmationService } from '../../../core/services/confirmation';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatDialogModule
   ],
 
@@ -39,13 +37,11 @@ import { ConfirmationService } from '../../../core/services/confirmation';
 
   styleUrl: './update.scss'
 })
-export class Update implements OnInit {
+export class Update {
 
   private fb = inject(FormBuilder);
 
   private financeService = inject(FinanceService);
-
-  private businessLineService = inject(BusinessLineService);
 
   private confirmationService = inject(ConfirmationService);
 
@@ -53,52 +49,47 @@ export class Update implements OnInit {
 
   paybill: Paybill = inject(MAT_DIALOG_DATA);
 
-  readonly businessLines = signal<BusinessLine[]>([]);
-
-  readonly providers = PAYBILL_PROVIDERS;
+  readonly currentAmount = this.paybill.amount ?? 0;
 
   saving = false;
 
-  updateForm = this.fb.nonNullable.group({
-    paybillNumber: [
-      this.paybill.paybillNumber,
-      Validators.required
-    ],
-    provider: [
-      this.paybill.provider,
-      Validators.required
-    ],
-    amount: [
-      this.paybill.amount,
-      Validators.required
-    ],
-    businessLineId: [
-      this.paybill.businessLineId,
-      Validators.required
+  withdrawForm = this.fb.nonNullable.group({
+    adjustAmount: [
+      null as number | null,
+      [Validators.required, Validators.min(0.01), this.maxWithdrawal(this.currentAmount)]
     ]
   });
 
-  ngOnInit(): void {
-    this.businessLineService.getBusinessLines().subscribe({
-      next: (businessLines) => this.businessLines.set(businessLines),
-      error: (error) => console.error('Failed to load business lines', error)
-    });
+  private maxWithdrawal(max: number) {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const value = Number(control.value);
+      return control.value != null && value > max ? { exceedsBalance: true } : null;
+    };
   }
 
   async save(): Promise<void> {
-    if (this.updateForm.invalid) {
-      this.updateForm.markAllAsTouched();
+    if (this.withdrawForm.invalid) {
+      this.withdrawForm.markAllAsTouched();
       return;
     }
 
-    const confirmed = await this.confirmationService.confirmUpdate(this.paybill.paybillNumber);
+    const { adjustAmount } = this.withdrawForm.getRawValue();
+
+    const confirmed = await this.confirmationService.confirmWithdraw(
+      this.paybill.paybillNumber,
+      String(adjustAmount)
+    );
     if (!confirmed) return;
 
-    const payload = this.updateForm.getRawValue();
     this.saving = true;
 
     this.financeService
-      .updatePaybill(this.paybill.id!, payload)
+      .withdraw(this.paybill.id!, {
+        paybillNumber: this.paybill.paybillNumber,
+        provider: this.paybill.provider,
+        currentAmount: String(this.currentAmount),
+        adjustAmount: String(adjustAmount)
+      })
       .subscribe({
         next: (updatedPaybill) => {
           this.saving = false;
@@ -106,10 +97,7 @@ export class Update implements OnInit {
         },
         error: (error) => {
           this.saving = false;
-          console.error(
-            'Failed to update paybill',
-            error
-          );
+          console.error('Failed to withdraw from paybill', error);
         }
       });
   }

@@ -4,13 +4,8 @@ import { BusinessUnit } from './analytics';
 export interface Product {
   id?: number;
   businessLineId: number;
-  code: string;
   name: string;
-  description: string;
-  displayOrder: number;
   active: boolean;
-  paybill: string;
-  accountNumber: string;
   createdAt?: string;
   updatedAt?: string;
 }

@@ -49,10 +49,6 @@ export class Form {
     'Medical'
   ];
   productForm = this.fb.nonNullable.group({
-    code: [
-      '',
-      Validators.required
-    ],
     name: [
       '',
       Validators.required
@@ -61,26 +57,11 @@ export class Form {
       '' as BusinessUnit | '',
       Validators.required
     ],
-    paybill: [
-      '',
-      Validators.required
-    ],
-    accountNumber: [
-      '',
-      Validators.required
-    ],
-    description: [
-      '',
-      Validators.required
-    ],
-    displayOrder: [
-      0,
-      Validators.required
-    ],
     status: [
       'Active' as 'Active' | 'Inactive',
       Validators.required
     ]
+    //maybe later add business unit logo
   });
   save(): void {
     if (this.productForm.invalid) {

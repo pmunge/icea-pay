@@ -1,0 +1,30 @@
+.role-form {
+  display: grid;
+  gap: 4px 16px;
+  min-width: min(420px, calc(100vw - 64px));
+  padding-top: 8px;
+}
+
+.role-form mat-form-field {
+  width: 100%;
+}
+
+mat-dialog-content {
+  padding-top: 8px;
+}
+
+mat-dialog-actions {
+  padding: 16px 24px 20px;
+  border-top: 1px solid #eaecf0;
+}
+
+mat-dialog-actions button[color="primary"] mat-progress-spinner {
+  display: inline-block;
+  margin: 0 8px;
+}
+
+@media (max-width: 520px) {
+  .role-form {
+    min-width: 0;
+  }
+}

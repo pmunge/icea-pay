@@ -41,16 +41,15 @@ export class Transactions implements OnInit {
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
   readonly displayedColumns = [
+    'date',
     'reference',
+    'memberName',
     'productId',
     'originChannel',
     'rail',
     'paymentOption',
-    'payerPhone',
-    'memberName',
     'amount',
-    'status',
-    'date'
+    'status'
   ];
 
   get filteredTransactions(): Transaction[] {
@@ -62,7 +61,6 @@ export class Transactions implements OnInit {
         transaction.rail,
         transaction.originChannel,
         transaction.paymentOption,
-        transaction.payerPhone,
         this.memberNameOf(transaction),
         transaction.amount,
         transaction.status
@@ -76,6 +74,14 @@ export class Transactions implements OnInit {
 
   dateOf(transaction: Transaction): string {
     return transaction.completedAt ?? transaction.initiatedAt ?? transaction.createdAt;
+  }
+
+  paymentOptionClass(transaction: Transaction): string {
+    return /full/i.test(transaction.paymentOption ?? '') ? 'full' : 'partial';
+  }
+
+  statusClass(transaction: Transaction): string {
+    return /complete/i.test(transaction.status ?? '') ? 'complete' : 'awaiting';
   }
 
   get pagedTransactions(): Transaction[] {

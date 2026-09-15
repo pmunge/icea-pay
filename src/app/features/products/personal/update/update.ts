@@ -60,32 +60,12 @@ export class Update {
   ];
 
   updateForm = this.fb.nonNullable.group({
-    code: [
-      this.product.code,
-      Validators.required
-    ],
     name: [
       this.product.name,
       Validators.required
     ],
     businessUnit: [
       businessLineName(this.product.businessLineId) ?? ('' as BusinessUnit | ''),
-      Validators.required
-    ],
-    paybill: [
-      this.product.paybill,
-      Validators.required
-    ],
-    accountNumber: [
-      this.product.accountNumber,
-      Validators.required
-    ],
-    description: [
-      this.product.description,
-      Validators.required
-    ],
-    displayOrder: [
-      this.product.displayOrder,
       Validators.required
     ],
     status: [

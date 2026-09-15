@@ -1,0 +1,28 @@
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.allocation-preview {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+
+  th,
+  td {
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+    font-size: 13px;
+  }
+
+  th {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}

@@ -47,17 +47,17 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['paybillNumber', 'provider', 'businessLine', 'amount', 'actions'];
+  readonly displayedColumns = ['paybillNumber', 'provider', 'actions'];
 
   get filteredPaybills(): Paybill[] {
     const term = this.searchTerm.trim().toLowerCase();
     return !term
       ? this.paybills
       : this.paybills.filter(paybill =>
-          [paybill.paybillNumber, paybill.provider, this.businessLineNameFor(paybill)].some(value =>
-            String(value ?? '').toLowerCase().includes(term)
-          )
-        );
+        [paybill.paybillNumber, paybill.provider].some(value =>
+          String(value ?? '').toLowerCase().includes(term)
+        )
+      );
   }
 
   get pagedPaybills(): Paybill[] {
@@ -83,10 +83,6 @@ export class List implements OnInit {
     });
   }
 
-  businessLineNameFor(paybill: Paybill): string {
-    return this.businessLineNames.get(paybill.businessLineId) ?? `#${paybill.businessLineId}`;
-  }
-
   applySearch(): void {
     this.pageIndex = 0;
   }
@@ -104,11 +100,5 @@ export class List implements OnInit {
       });
   }
 
-  openUpdateDialog(paybill: Paybill): void {
-    this.dialog.open(Update, { width: '420px', maxWidth: 'calc(100vw - 32px)', data: paybill })
-      .afterClosed()
-      .subscribe(updated => {
-        if (updated) this.loadPaybills();
-      });
-  }
+
 }

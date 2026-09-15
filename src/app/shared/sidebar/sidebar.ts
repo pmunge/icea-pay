@@ -45,6 +45,8 @@ export class Sidebar {
   financeOpen = false;
   agentsOpen = false;
   membersOpen = false;
+  profilesOpen = false;
+  rolesOpen = false;
 
   toggleDashboard(): void {
     this.dashboardOpen = !this.dashboardOpen;
@@ -77,5 +79,11 @@ export class Sidebar {
   }
   toggleMembers(): void {
     this.membersOpen = !this.membersOpen;
+  }
+  toggleProfiles(): void {
+    this.profilesOpen = !this.profilesOpen;
+  }
+  toggleRoles(): void {
+    this.rolesOpen = !this.rolesOpen;
   }
 }

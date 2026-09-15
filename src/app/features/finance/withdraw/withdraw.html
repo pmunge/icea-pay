@@ -1,1 +1,41 @@
-<p>withdraw works!</p>
+<section class="page">
+    <header class="page-header">
+        <div>
+            <h1>Manage Money in Paybills</h1>
+            <p>Withdraw Money from Paybills</p>
+        </div>
+    </header>
+    <mat-card class="product-card">
+        <mat-form-field appearance="outline" class="search-field"><mat-label>Search paybills</mat-label><input matInput
+                [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+                placeholder="Paybill number, provider or business line"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+        <div class="table-container">
+            <table mat-table [dataSource]="pagedPaybills" class="product-table">
+                <ng-container matColumnDef="paybillNumber">
+                    <th mat-header-cell *matHeaderCellDef>Paybill Number</th>
+                    <td mat-cell *matCellDef="let paybill">{{ paybill.paybillNumber }}</td>
+                </ng-container><ng-container matColumnDef="provider">
+                    <th mat-header-cell *matHeaderCellDef>Provider</th>
+                    <td mat-cell *matCellDef="let paybill">{{ paybill.provider }}</td>
+                </ng-container><ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef>Amount</th>
+                    <td mat-cell *matCellDef="let paybill">{{ paybill.amount }}</td>
+                </ng-container><ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let paybill">
+                        <button mat-stroked-button color="primary" type="button" aria-label="Withdraw"
+                            (click)="openWithdrawDialog(paybill)">
+                            <mat-icon>payments</mat-icon>Withdraw
+                        </button>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>@if (!filteredPaybills.length) { <div class="empty-state">No paybills match your search.
+            </div> }
+        </div>
+        <mat-paginator [length]="filteredPaybills.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+            [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)"
+            aria-label="Paybills pagination"></mat-paginator>
+    </mat-card>
+</section>

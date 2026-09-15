@@ -1,0 +1,90 @@
+.page {
+  padding-bottom: 32px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 650;
+  color: var(--app-navy);
+}
+
+.page-header p {
+  margin: 6px 0 0;
+  color: var(--app-muted);
+}
+
+.page-header button {
+  flex: 0 0 auto;
+}
+
+.product-card {
+  padding: 24px 0 0;
+  overflow: hidden;
+}
+
+.search-field {
+  display: block;
+  max-width: 440px;
+  margin: 0 24px 8px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.product-table {
+  width: 100%;
+  min-width: 320px;
+}
+
+th.mat-mdc-header-cell {
+  background: var(--app-blue-soft);
+  color: var(--app-navy);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+td.mat-mdc-cell,
+th.mat-mdc-header-cell {
+  padding: 16px 24px;
+  border-bottom-color: var(--app-line);
+}
+
+tr.mat-mdc-row:hover {
+  background: var(--app-blue-soft);
+}
+
+.empty-state {
+  padding: 48px 24px;
+  color: var(--app-muted);
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .page-header {
+    flex-direction: column;
+  }
+
+  .page-header button {
+    width: 100%;
+  }
+
+  .product-card {
+    padding-top: 16px;
+  }
+
+  .search-field {
+    margin: 0 16px 8px;
+  }
+}

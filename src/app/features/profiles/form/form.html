@@ -1,1 +1,30 @@
-<p>form works!</p>
+<h2 mat-dialog-title>
+  Create Profile
+</h2>
+<mat-dialog-content>
+  <form [formGroup]="profilesForm" class="profile-form">
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Profile Name
+      </mat-label>
+      <input matInput formControlName="profile" placeholder="Enter profile name">
+      @if (profilesForm.controls.profile.hasError('required')) {
+      <mat-error>
+        Profile name is required
+      </mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving">
+    Cancel
+  </button>
+  <button mat-flat-button color="primary" type="button" (click)="save()" [disabled]="saving">
+    @if (saving) {
+    <mat-progress-spinner diameter="18" mode="indeterminate"></mat-progress-spinner>
+    } @else {
+    Create Profile
+    }
+  </button>
+</mat-dialog-actions>
