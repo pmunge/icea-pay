@@ -59,14 +59,15 @@ export class TransactionsTable {
   ];
   readonly displayedColumns = [
     'index',
+    'date',
+    'time',
     'reference',
+    'memberName',
     'productId',
     'originChannel',
     'paymentOption',
-    'memberName',
     'amount',
     'status',
-    'date',
   ];
 
   dateOf(transaction: Transaction): string {
