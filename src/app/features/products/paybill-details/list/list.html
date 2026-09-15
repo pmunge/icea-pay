@@ -6,10 +6,20 @@
     </div>
   </header>
   <mat-card class="product-card">
-    <mat-form-field appearance="outline" class="search-field"><mat-label>Search</mat-label><input matInput
-        [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
-        placeholder="Product, business line, paybill, provider or country"><mat-icon
-        matSuffix>search</mat-icon></mat-form-field>
+    <div class="filters-row">
+      <mat-form-field appearance="outline" class="search-field"><mat-label>Search</mat-label><input matInput
+          [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+          placeholder="Product, business line, paybill, provider or country"><mat-icon
+          matSuffix>search</mat-icon></mat-form-field>
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Business Line</mat-label>
+        <mat-select [(ngModel)]="businessLineFilter" (ngModelChange)="applySearch()">
+          @for (option of businessLineOptions; track option) {
+          <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="table-container">
       <table mat-table [dataSource]="pagedDetails" class="product-table">
         <ng-container matColumnDef="index">

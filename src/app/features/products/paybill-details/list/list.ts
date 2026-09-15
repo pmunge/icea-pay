@@ -6,6 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 
 import { ProductPaybillDetail } from '../../../../core/models/product-paybill-detail';
@@ -25,6 +26,7 @@ import { ProductService } from '../../../../core/services/product';
     MatIconModule,
     MatInputModule,
     MatPaginatorModule,
+    MatSelectModule,
     MatTableModule
   ],
   templateUrl: './list.html',
@@ -36,6 +38,7 @@ export class List implements OnInit {
 
   details: ProductPaybillDetail[] = [];
   searchTerm = '';
+  businessLineFilter = 'All';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
@@ -50,21 +53,27 @@ export class List implements OnInit {
     'countryName'
   ];
 
+  /** Business lines actually present in the fetched data, so the filter always matches what the backend sends. */
+  get businessLineOptions(): string[] {
+    const names = new Set(this.details.map(detail => detail.businesslineName).filter(Boolean));
+    return ['All', ...Array.from(names).sort()];
+  }
+
   get filteredDetails(): ProductPaybillDetail[] {
     const term = this.searchTerm.trim().toLowerCase();
-    return !term
-      ? this.details
-      : this.details.filter(detail =>
-        [
-          detail.productCode,
-          detail.productName,
-          detail.businesslineName,
-          detail.description,
-          detail.paybillNumber,
-          detail.provider,
-          detail.countryName
-        ].some(value => String(value ?? '').toLowerCase().includes(term))
-      );
+    return this.details.filter(detail => {
+      if (this.businessLineFilter !== 'All' && detail.businesslineName !== this.businessLineFilter) return false;
+      if (!term) return true;
+      return [
+        detail.productCode,
+        detail.productName,
+        detail.businesslineName,
+        detail.description,
+        detail.paybillNumber,
+        detail.provider,
+        detail.countryName
+      ].some(value => String(value ?? '').toLowerCase().includes(term));
+    });
   }
 
   get pagedDetails(): ProductPaybillDetail[] {
