@@ -1,0 +1,49 @@
+<section class="page">
+  <header class="page-header">
+    <div>
+      <h1>Product Paybill Details</h1>
+      <p>See which paybill each product is routed through, by business line and country.</p>
+    </div>
+  </header>
+  <mat-card class="product-card">
+    <mat-form-field appearance="outline" class="search-field"><mat-label>Search</mat-label><input matInput
+        [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+        placeholder="Product, business line, paybill, provider or country"><mat-icon
+        matSuffix>search</mat-icon></mat-form-field>
+    <div class="table-container">
+      <table mat-table [dataSource]="pagedDetails" class="product-table">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container><ng-container matColumnDef="productCode">
+          <th mat-header-cell *matHeaderCellDef>Product Code</th>
+          <td mat-cell *matCellDef="let detail">{{ detail.productCode }}</td>
+        </ng-container><ng-container matColumnDef="productName">
+          <th mat-header-cell *matHeaderCellDef>Product</th>
+          <td mat-cell *matCellDef="let detail"><strong>{{ detail.productName }}</strong></td>
+        </ng-container><ng-container matColumnDef="businesslineName">
+          <th mat-header-cell *matHeaderCellDef>Business Line</th>
+          <td mat-cell *matCellDef="let detail">{{ detail.businesslineName }}</td>
+        </ng-container><ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let detail" class="description-cell">{{ detail.description }}</td>
+        </ng-container><ng-container matColumnDef="paybillNumber">
+          <th mat-header-cell *matHeaderCellDef>Paybill Number</th>
+          <td mat-cell *matCellDef="let detail">{{ detail.paybillNumber }}</td>
+        </ng-container><ng-container matColumnDef="provider">
+          <th mat-header-cell *matHeaderCellDef>Provider</th>
+          <td mat-cell *matCellDef="let detail">{{ detail.provider }}</td>
+        </ng-container><ng-container matColumnDef="countryName">
+          <th mat-header-cell *matHeaderCellDef>Country</th>
+          <td mat-cell *matCellDef="let detail">{{ detail.countryName }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>@if (!filteredDetails.length) { <div class="empty-state">No product paybill details match your
+        search.</div> }
+    </div>
+    <mat-paginator [length]="filteredDetails.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)"
+      aria-label="Product paybill details pagination"></mat-paginator>
+  </mat-card>
+</section>

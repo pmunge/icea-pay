@@ -153,6 +153,17 @@ export const routes: Routes = [
                 }
             },
             {
+                path: 'products/paybill-details',
+                canActivate: [roleGuard('HQ')],
+                loadComponent: () =>
+                    import(
+                        './features/products/paybill-details/list/list'
+                    ).then(m => m.List),
+                data: {
+                    breadcrumb: 'Product Paybill Details'
+                }
+            },
+            {
                 path: 'channelsList',
                 canActivate: [roleGuard('HQ')],
                 loadComponent: () =>

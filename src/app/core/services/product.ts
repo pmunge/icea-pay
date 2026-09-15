@@ -5,6 +5,7 @@ import { environment } from '../../../environments/env';
 
 import { Product } from '../models/product';
 import { ProductPaybillRequest, ProductPaybillResponse } from '../models/product-paybill';
+import { ProductPaybillDetail } from '../models/product-paybill-detail';
 
 interface ApiResponse<T> {
   status: number;
@@ -58,6 +59,16 @@ export class ProductService {
     return this.http.delete<void>(
       `${this.apiUrl}/${id}`
     );
+
+  }
+
+
+  /** Flattened view of every product-paybill routing across all products. */
+  getPaybillDetails(): Observable<ProductPaybillDetail[]> {
+
+    return this.http
+      .get<ApiResponse<ProductPaybillDetail[]>>(`${this.apiUrl}/paybills/details`)
+      .pipe(map((res) => res.data));
 
   }
 

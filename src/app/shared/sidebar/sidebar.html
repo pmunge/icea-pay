@@ -92,6 +92,11 @@
                     <mat-icon matListItemIcon>list</mat-icon>
                     <span matListItemTitle>Products Management</span>
                 </a>
+                <a mat-list-item routerLink="/products/paybill-details" [routerLinkActiveOptions]="{ exact: true }"
+                    routerLinkActive="active">
+                    <mat-icon matListItemIcon>payments</mat-icon>
+                    <span matListItemTitle>Paybill Details</span>
+                </a>
             </div>
             }
             <button mat-list-item class="nav-parent" [class.is-open]="transactionsOpen" type="button"
