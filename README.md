@@ -1,3 +1,6 @@
+login wangeprudy@gmail.com
+password secret123
+
 # Insurance
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.21.
