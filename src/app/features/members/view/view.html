@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Member Details</h2>
+<mat-dialog-content>
+  @if (loading()) {
+  <div class="loading-state">
+    <mat-spinner diameter="28"></mat-spinner>
+    <span>Loading member&hellip;</span>
+  </div>
+  } @else if (error()) {
+  <p class="error-state">{{ error() }}</p>
+  } @else if (member(); as m) {
+  <dl class="member-details">
+    <dt>Member No.</dt>
+    <dd>{{ m.memberNo }}</dd>
+
+    <dt>Name</dt>
+    <dd>{{ m.firstName }} {{ m.otherNames }}</dd>
+
+    <dt>National ID</dt>
+    <dd>{{ m.nationalId || '—' }}</dd>
+
+    <dt>Phone</dt>
+    <dd>{{ m.phoneNumber || '—' }}</dd>
+
+    <dt>Email</dt>
+    <dd>{{ m.email || '—' }}</dd>
+
+    <dt>Role</dt>
+    <dd>{{ m.role || '—' }}</dd>
+
+    <dt>Status</dt>
+    <dd><span class="status" [class.inactive]="m.status !== 'ACTIVE'">{{ m.status }}</span></dd>
+
+    <dt>Registered</dt>
+    <dd>{{ m.createdAt ? (m.createdAt | date:'medium') : '—' }}</dd>
+  </dl>
+  }
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-flat-button color="primary" type="button" (click)="close()">
+    Close
+  </button>
+</mat-dialog-actions>

@@ -1,8 +1,16 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/env';
 
 import { Branches } from '../models/branch';
+
+interface ApiResponse<T> {
+  status: number;
+  success: boolean;
+  message: string;
+  data: T;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,33 +18,40 @@ import { Branches } from '../models/branch';
 export class Branch {
   private http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:3000/branches';
+  private readonly apiUrl = `${environment.apiUrl}/branches`;
 
-  getBranches(): Observable<Branches[]> {
-    return this.http.get<Branches[]>(this.apiUrl);
+  getBranches(activeOnly = false): Observable<Branches[]> {
+    const params = new HttpParams().set('activeOnly', activeOnly);
+
+    return this.http
+      .get<ApiResponse<Branches[]>>(this.apiUrl, { params })
+      .pipe(map((res) => res.data));
   }
 
-  createBranch(branch: Branches): Observable<Branches> {
-    return this.http.post<Branches>(
-      this.apiUrl,
-      branch
-    );
+  getBranch(id: number): Observable<Branches> {
+    return this.http
+      .get<ApiResponse<Branches>>(`${this.apiUrl}/${id}`)
+      .pipe(map((res) => res.data));
+  }
+
+  createBranch(branch: Pick<Branches, 'name' | 'code' | 'location' | 'phoneNumber'>): Observable<Branches> {
+    return this.http
+      .post<ApiResponse<Branches>>(this.apiUrl, branch)
+      .pipe(map((res) => res.data));
   }
 
   updateBranch(
     id: number,
-    branch: Branches
+    branch: Pick<Branches, 'name' | 'code' | 'location' | 'phoneNumber'>
   ): Observable<Branches> {
-    return this.http.put<Branches>(
-      `${this.apiUrl}/${id}`,
-      branch
-    );
+    return this.http
+      .put<ApiResponse<Branches>>(`${this.apiUrl}/${id}`, branch)
+      .pipe(map((res) => res.data));
   }
 
-  deleteBranch(id: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${id}`
-    );
+  deactivateBranch(id: number): Observable<void> {
+    return this.http
+      .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
+      .pipe(map(() => void 0));
   }
-
 }

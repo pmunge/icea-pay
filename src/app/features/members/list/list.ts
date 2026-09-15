@@ -4,13 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { MemberService } from '../../../core/services/member-service'
+import { Subject, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+
+import { MemberService } from '../../../core/services/member-service';
+import { AuthService } from '../../../core/services/auth';
 import { Members } from '../../../core/models/members';
+import { View } from '../view/view';
 
 @Component({
   selector: 'app-business-products',
@@ -20,6 +26,7 @@ import { Members } from '../../../core/models/members';
     MatButtonModule,
     MatCardModule,
     MatChipsModule,
+    MatDialogModule,
     MatFormFieldModule,
     MatIconModule,
     MatInputModule,
@@ -30,39 +37,93 @@ import { Members } from '../../../core/models/members';
 })
 export class List implements OnInit {
   private readonly memberService = inject(MemberService);
+  private readonly authService = inject(AuthService);
+  private readonly dialog = inject(MatDialog);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly search$ = new Subject<string>();
+
+  /** HQ sees every member; every other role only sees members of their own branch. */
+  readonly isHQ = this.authService.getRole() === 'HQ';
+  private myBranchId: number | null = null;
+
   members: Members[] = [];
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['name', 'nationalId', 'phone', 'status'];
-  get filteredMembers(): Members[] {
-    const term = this.searchTerm.trim().toLowerCase();
-    return !term ? this.members : this.members.filter(member => [member.name, member.nationalId, member.phone, member.status].some(value => value.toLowerCase().includes(term)));
-  }
+  readonly displayedColumns = ['memberNo', 'name', 'nationalId', 'phone', 'role', 'status', 'actions'];
+
   get pagedMembers(): Members[] {
     const start = this.pageIndex * this.pageSize;
-    return this.filteredMembers.slice(start, start + this.pageSize);
+    return this.members.slice(start, start + this.pageSize);
   }
+
   ngOnInit(): void {
-    this.loadMembers();
+    this.search$
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(term => {
+          const query = term.trim();
+          const results$ = query ? this.memberService.searchMembers(query) : this.memberService.getMembers();
+          return results$.pipe(catchError(error => {
+            console.error('Failed to search members', error);
+            return of<Members[]>([]);
+          }));
+        })
+      )
+      .subscribe(members => {
+        this.pageIndex = 0;
+        this.members = this.scopeToBranch(members);
+        this.changeDetectorRef.markForCheck();
+      });
+
+    if (this.isHQ) {
+      this.loadMembers();
+    } else {
+      // Resolve the signed-in manager's own branch before loading so members
+      // from other branches never briefly appear.
+      this.authService.getMyBranchId().subscribe({
+        next: branchId => {
+          this.myBranchId = branchId;
+          this.loadMembers();
+        },
+        error: error => {
+          console.error('Failed to resolve signed-in staff member\'s branch', error);
+          this.loadMembers();
+        }
+      });
+    }
   }
+
   loadMembers(): void {
-    this.memberService.loadMembers().subscribe({
+    this.memberService.getMembers().subscribe({
       next: members => {
-        this.members = members;
+        this.members = this.scopeToBranch(members);
         this.changeDetectorRef.markForCheck();
       },
       error: error => console.error('Failed to load members', error)
     });
   }
-  applySearch(): void {
-    this.pageIndex = 0;
+
+  private scopeToBranch(members: Members[]): Members[] {
+    return this.isHQ ? members : members.filter(member => member.branchId === this.myBranchId);
   }
+
+  applySearch(): void {
+    this.search$.next(this.searchTerm);
+  }
+
   changePage(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }
-  
+
+  openView(member: Members): void {
+    this.dialog.open(View, {
+      width: '480px',
+      maxWidth: 'calc(100vw - 32px)',
+      data: member.memberNo
+    });
+  }
 }

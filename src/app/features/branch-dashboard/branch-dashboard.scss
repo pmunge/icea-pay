@@ -1,0 +1,108 @@
+.page {
+    padding-bottom: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.loading-state {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 48px 24px;
+    color: var(--app-muted);
+}
+
+.empty-state {
+    padding: 48px 24px;
+    color: var(--app-muted);
+    text-align: center;
+}
+
+.branch-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 20px 24px;
+}
+
+.branch-header__main h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--app-navy);
+}
+
+.branch-header__main p {
+    margin: 6px 0 0;
+    color: var(--app-muted);
+}
+
+.branch-header__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.meta-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--app-muted);
+}
+
+.meta-chip mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+.status {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--app-navy);
+}
+
+.status.inactive {
+    color: var(--app-muted);
+}
+
+.members-card {
+    padding: 20px 0 0;
+    overflow: hidden;
+}
+
+.members-card h2 {
+    margin: 0 24px 8px;
+    font-size: 18px;
+    font-weight: 650;
+    color: var(--app-navy);
+}
+
+.table-container {
+    overflow-x: auto;
+}
+
+.members-table {
+    width: 100%;
+    min-width: 560px;
+}
+
+th.mat-mdc-header-cell {
+    background: var(--app-blue-soft);
+    color: var(--app-navy);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+td.mat-mdc-cell,
+th.mat-mdc-header-cell {
+    padding: 16px 24px;
+    border-bottom-color: var(--app-line);
+}

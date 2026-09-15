@@ -11,7 +11,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { forkJoin } from 'rxjs';
 
-import { Transaction } from '../../core/models/transactions';
+import { Transaction, transactionMemberName } from '../../core/models/transactions';
 import { TransactionsService } from '../../core/services/transactions';
 import { ProductService } from '../../core/services/product';
 import { BUSINESS_LINE_IDS } from '../../core/models/product';
@@ -64,6 +64,7 @@ export class UnitTransactions implements OnInit {
     'originChannel',
     'paymentOption',
     'payerPhone',
+    'memberName',
     'amount',
     'status',
     'date'
@@ -74,14 +75,19 @@ export class UnitTransactions implements OnInit {
     return !term ? this.transactions : this.transactions.filter(transaction =>
       [
         transaction.reference,
-        transaction.productId.toString(),
+        transaction.productId,
         transaction.originChannel,
         transaction.paymentOption,
         transaction.payerPhone,
-        transaction.amount.toString(),
+        this.memberNameOf(transaction),
+        transaction.amount,
         transaction.status
-      ].some(value => value.toLowerCase().includes(term))
+      ].some(value => String(value ?? '').toLowerCase().includes(term))
     );
+  }
+
+  memberNameOf(transaction: Transaction): string {
+    return transactionMemberName(transaction);
   }
 
   dateOf(transaction: Transaction): string {
@@ -139,7 +145,7 @@ export class UnitTransactions implements OnInit {
 
   exportToPdf(): void {
     const exportData = this.getExportData();
-    const columns = ['reference', 'productId', 'originChannel', 'paymentOption', 'payerPhone', 'amount', 'status', 'date'];
+    const columns = ['reference', 'productId', 'originChannel', 'paymentOption', 'payerPhone', 'memberName', 'amount', 'status', 'date'];
     const title = `${this.businessUnit()} Transactions Report`;
 
     this.exportService.exportToPdf(
@@ -157,6 +163,7 @@ export class UnitTransactions implements OnInit {
       originChannel: transaction.originChannel,
       paymentOption: transaction.paymentOption,
       payerPhone: transaction.payerPhone,
+      memberName: this.memberNameOf(transaction),
       amount: transaction.amount,
       status: transaction.status,
       date: new Date(this.dateOf(transaction)).toLocaleDateString()

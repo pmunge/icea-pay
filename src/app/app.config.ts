@@ -5,6 +5,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { OVERLAY_DEFAULT_CONFIG } from '@angular/cdk/overlay';
 
 import { authInterceptorInterceptor } from './core/interceptors/auth-interceptor-interceptor';
+import { tableLoadingInterceptor } from './core/interceptors/table-loading-interceptor';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -12,7 +13,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideCharts(withDefaultRegisterables()),
-    provideHttpClient(withInterceptors([authInterceptorInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptorInterceptor, tableLoadingInterceptor])),
     // CDK overlays (mat-dialog, menus, etc.) default to the browser's native
     // popover "top layer", which no z-index can render above — that hid the
     // SweetAlert2 confirmation behind open Material dialogs. Opt back into

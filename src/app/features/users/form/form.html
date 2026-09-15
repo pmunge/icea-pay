@@ -4,136 +4,95 @@
 <mat-dialog-content>
   <form [formGroup]="usersForm" class="product-form">
     <mat-form-field appearance="outline">
-      <mat-label>
-        Users Name
-      </mat-label>
-      <input matInput formControlName="fname" placeholder="Enter Users name"> @if (
-      usersForm.controls.fname.hasError('required')
-      ) {
-      <mat-error>
-        Users name is required
-      </mat-error>
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" placeholder="Enter username">
+      @if (usersForm.controls.username.hasError('required')) {
+      <mat-error>Username is required</mat-error>
+      } @else if (usersForm.controls.username.hasError('minlength')) {
+      <mat-error>Username must be at least 3 characters</mat-error>
       }
     </mat-form-field>
+
     <mat-form-field appearance="outline">
-      <mat-label>
-        Users Surname
-      </mat-label>
-      <input matInput formControlName="lname" placeholder="Enter Users surname"> @if (
-      usersForm.controls.lname.hasError('required')
-      ) {
-      <mat-error>
-        Users Surname is required
-      </mat-error>
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" placeholder="Enter first name">
+      @if (usersForm.controls.firstName.hasError('required')) {
+      <mat-error>First name is required</mat-error>
       }
     </mat-form-field>
+
     <mat-form-field appearance="outline">
-      <mat-label>
-        Business Unit
-      </mat-label>
-      <mat-select formControlName="branch" placeholder="Select a business unit">
-        @for (unit of businessUnits; track unit) {
-        <mat-option [value]="unit">
-          {{ unit }}
-        </mat-option>
+      <mat-label>Middle Name</mat-label>
+      <input matInput formControlName="middleName" placeholder="Optional">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Surname</mat-label>
+      <input matInput formControlName="surName" placeholder="Enter surname">
+      @if (usersForm.controls.surName.hasError('required')) {
+      <mat-error>Surname is required</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput type="email" formControlName="email" placeholder="Enter email">
+      @if (usersForm.controls.email.hasError('required')) {
+      <mat-error>Email is required</mat-error>
+      } @else if (usersForm.controls.email.hasError('email')) {
+      <mat-error>Enter a valid email</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Phone</mat-label>
+      <input matInput formControlName="phoneNumber" placeholder="Enter phone">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>ID Number</mat-label>
+      <input matInput formControlName="idNumber" placeholder="Enter national ID">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>County</mat-label>
+      <input matInput formControlName="county" placeholder="Enter county">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Role</mat-label>
+      <mat-select formControlName="role">
+        @for (role of roles(); track role) {
+        <mat-option [value]="role">{{ role }}</mat-option>
         }
       </mat-select>
-      @if (
-      usersForm.controls.branch.hasError('required')
-      ) {
-      <mat-error>
-        Business unit is required
-      </mat-error>
+      @if (usersForm.controls.role.hasError('required')) {
+      <mat-error>Role is required</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>
-        Department
-      </mat-label>
-      <input matInput formControlName="department" placeholder="Enter department"> @if (
-      usersForm.controls.department.hasError('required')
-      ) {
-      <mat-error>
-        Department is required
-      </mat-error>
-      }
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>
-        Email
-      </mat-label>
-      <input matInput formControlName="email" placeholder="Enter email"> @if (
-      usersForm.controls.email.hasError('required')
-      ) {
-      <mat-error>
-        Email is required
-      </mat-error>
-      }
-    </mat-form-field>
-    <mat-form-field appearance="outline">
-      <mat-label>
-        Phone
-      </mat-label>
-      <input matInput formControlName="phone" placeholder="Enter phone"> @if (
-      usersForm.controls.phone.hasError('required')
-      ) {
-      <mat-error>
-        Phone is required
-      </mat-error>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>
-        Role
-      </mat-label>
-      <mat-select formControlName="role">
-        <mat-option value="HQ">
-          HQ
-        </mat-option>
-        <mat-option value="GENERAL">
-          General
-        </mat-option>
-        <mat-option value="LIFE">
-          Life
-        </mat-option>
-        <mat-option value="MEDICAL">
-          Medical
-        </mat-option>
-        <mat-option value="INVEST">
-          Investment
-        </mat-option>
-      </mat-select>
-      @if (
-      usersForm.controls.role.hasError('required')
-      ) {
-      <mat-error>
-        Role is required
-      </mat-error>
-      }
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>
-        Status
-      </mat-label>
-      <mat-select formControlName="status">
-        <mat-option value="Active">
-          Active
-        </mat-option>
-        <mat-option value="Inactive">
-          Inactive
-        </mat-option>
+      <mat-label>Branch</mat-label>
+      <mat-select formControlName="branchId">
+        <mat-option [value]="null">No branch</mat-option>
+        @for (branch of branches(); track branch.id) {
+        <mat-option [value]="branch.id">{{ branch.name }}</mat-option>
+        }
       </mat-select>
     </mat-form-field>
+
+    <p class="hint">An initial password will be auto-generated and emailed to this address.</p>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-  <button mat-button type="button" (click)="cancel()">
+  <button mat-button type="button" (click)="cancel()" [disabled]="saving()">
     Cancel
   </button>
-  <button mat-flat-button color="primary" type="button" (click)="save()">
-    Create Channel
+  <button mat-flat-button color="primary" type="button" (click)="save()" [disabled]="saving()">
+    @if (saving()) {
+    <mat-spinner diameter="18"></mat-spinner>
+    } @else {
+    Create User
+    }
   </button>
 </mat-dialog-actions>

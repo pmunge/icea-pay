@@ -1,6 +1,6 @@
 <div class="sidebar-content">
     <div class="logo">
-        <img class="logo-image" src="/static/images/icea-lion-logo.png" alt="ICEA logo">
+        <img class="logo-image" src="/static/images/iCEA_PAY.png" alt="ICEA logo">
     </div>
     <div class="navigation">
         <mat-nav-list>
@@ -17,6 +17,10 @@
             <a mat-list-item routerLink="/dashboard/transactions" routerLinkActive="active">
                 <mat-icon matListItemIcon>sync</mat-icon>
                 <span matListItemTitle>Transactions</span>
+            </a>
+            <a mat-list-item routerLink="/membersList" routerLinkActive="active">
+                <mat-icon matListItemIcon>groups</mat-icon>
+                <span matListItemTitle>Members</span>
             </a>
             }
             @if (isHQ()) {
@@ -120,12 +124,10 @@
 
             </div>
             }
-            <!--
             <button mat-list-item class="nav-parent" [class.is-open]="branchOpen" type="button"
                 (click)="toggleBranch()">
-                <mat-icon matListItemIcon>analytics</mat-icon>
+                <mat-icon matListItemIcon>account_balance</mat-icon>
                 <span matListItemTitle>Branch</span>
-                <!--<mat-icon class="expand-icon">{{ dashboardOpen ? 'expand_less' : 'expand_more' }}</mat-icon> 
             </button>
             @if (branchOpen) {
             <div class="sub-menu nested-menu">
@@ -135,7 +137,7 @@
                 </a>
 
             </div>
-            }-->
+            }
             <button mat-list-item class="nav-parent" [class.is-open]="usersOpen" type="button" (click)="toggleUsers()">
                 <mat-icon matListItemIcon>analytics</mat-icon>
                 <span matListItemTitle>Users</span>
@@ -145,7 +147,7 @@
             <div class="sub-menu nested-menu">
                 <a mat-list-item routerLink="/usersList" routerLinkActive="active">
                     <mat-icon matListItemIcon>list</mat-icon>
-                    <span matListItemTitle>Users</span>
+                    <span matListItemTitle> Portal Users</span>
                 </a>
 
             </div>
@@ -164,11 +166,12 @@
 
             </div>
             }
+            <!--
             <button mat-list-item class="nav-parent" [class.is-open]="agentsOpen" type="button"
                 (click)="toggleAgents()">
                 <mat-icon matListItemIcon>support_agent</mat-icon>
                 <span matListItemTitle>Agents</span>
-            </button>
+            </button> -->
             @if (agentsOpen) {
             <div class="sub-menu nested-menu">
                 <a mat-list-item routerLink="/agentsList" routerLinkActive="active">

@@ -73,6 +73,19 @@ tr.mat-mdc-row:hover {
 .status {
     font-size: 13px;
     font-weight: 500;
+    color: var(--app-navy);
+}
+
+.status.inactive {
+    color: var(--app-muted);
+}
+
+.actions-cell {
+    white-space: nowrap;
+}
+
+mat-chip-set {
+    max-width: 320px;
 }
 
 .empty-state {

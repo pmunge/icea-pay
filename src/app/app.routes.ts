@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { Layout } from './shared/layout/layout';
-import { authGuard, roleGuard, overviewGuard, otpGuard } from './core/guards/auth-guard';
+import { authGuard, roleGuard, overviewGuard, otpGuard, branchGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
     {
@@ -175,6 +175,19 @@ export const routes: Routes = [
                 }
             },
             {
+                // Per-branch dashboard — a physical branch's own view of its
+                // members and transactions, independent of business-unit role.
+                path: 'branches/:slug',
+                canActivate: [branchGuard],
+                loadComponent: () =>
+                    import(
+                        './features/branch-dashboard/branch-dashboard'
+                    ).then(m => m.BranchDashboard),
+                data: {
+                    breadcrumb: 'Branch Dashboard'
+                }
+            },
+            {
                 path: 'usersList',
                 canActivate: [roleGuard('HQ')],
                 loadComponent: () =>
@@ -209,7 +222,7 @@ export const routes: Routes = [
             },
             {
                 path: 'membersList',
-                canActivate: [roleGuard('HQ')],
+                canActivate: [roleGuard(['HQ', 'GENERAL', 'LIFE', 'MEDICAL', 'INVEST'])],
                 loadComponent: () =>
                     import(
                         './features/members/list/list'

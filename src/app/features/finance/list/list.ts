@@ -10,8 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { forkJoin } from 'rxjs';
+
 import { FinanceService } from '../../../core/services/finance-service';
-import { paybillsResponse } from '../../../core/models/paybills';
+import { BusinessLineService } from '../../../core/services/business-line-service';
+import { Paybill } from '../../../core/models/paybills';
 import { Form } from '../form/form';
 import { Update } from '../update/update';
 
@@ -34,41 +37,65 @@ import { Update } from '../update/update';
 })
 export class List implements OnInit {
   private readonly financeService = inject(FinanceService);
+  private readonly businessLineService = inject(BusinessLineService);
   private readonly dialog = inject(MatDialog);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  paybills: paybillsResponse[] = [];
+
+  paybills: Paybill[] = [];
+  businessLineNames = new Map<number, string>();
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['MoMo', 'paybill', 'amount', 'status', 'actions'];
-  get filteredPaybills(): paybillsResponse[] {
+  readonly displayedColumns = ['paybillNumber', 'provider', 'businessLine', 'amount', 'actions'];
+
+  get filteredPaybills(): Paybill[] {
     const term = this.searchTerm.trim().toLowerCase();
-    return !term ? this.paybills : this.paybills.filter(paybill => [paybill.MoMo, paybill.paybill, String(paybill.amount), paybill.status].some(value => value.toLowerCase().includes(term)));
+    return !term
+      ? this.paybills
+      : this.paybills.filter(paybill =>
+          [paybill.paybillNumber, paybill.provider, this.businessLineNameFor(paybill)].some(value =>
+            String(value ?? '').toLowerCase().includes(term)
+          )
+        );
   }
-  get pagedPaybills(): paybillsResponse[] {
+
+  get pagedPaybills(): Paybill[] {
     const start = this.pageIndex * this.pageSize;
     return this.filteredPaybills.slice(start, start + this.pageSize);
   }
+
   ngOnInit(): void {
     this.loadPaybills();
   }
+
   loadPaybills(): void {
-    this.financeService.getPaybills().subscribe({
-      next: paybills => {
+    forkJoin({
+      paybills: this.financeService.getPaybills(),
+      businessLines: this.businessLineService.getBusinessLines()
+    }).subscribe({
+      next: ({ paybills, businessLines }) => {
         this.paybills = paybills;
+        this.businessLineNames = new Map(businessLines.map(line => [line.id, line.name]));
         this.changeDetectorRef.markForCheck();
       },
       error: error => console.error('Failed to load paybills', error)
     });
   }
+
+  businessLineNameFor(paybill: Paybill): string {
+    return this.businessLineNames.get(paybill.businessLineId) ?? `#${paybill.businessLineId}`;
+  }
+
   applySearch(): void {
     this.pageIndex = 0;
   }
+
   changePage(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }
+
   openCreateDialog(): void {
     this.dialog.open(Form, { width: '560px', maxWidth: 'calc(100vw - 32px)' })
       .afterClosed()
@@ -76,7 +103,8 @@ export class List implements OnInit {
         if (created) this.loadPaybills();
       });
   }
-  openUpdateDialog(paybill: paybillsResponse): void {
+
+  openUpdateDialog(paybill: Paybill): void {
     this.dialog.open(Update, { width: '420px', maxWidth: 'calc(100vw - 32px)', data: paybill })
       .afterClosed()
       .subscribe(updated => {

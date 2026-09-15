@@ -9,7 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { Transaction } from '../../core/models/transactions';
+import { Transaction, transactionMemberName } from '../../core/models/transactions';
 import { TransactionsService } from '../../core/services/transactions';
 import { ExportService } from '../../core/services/export';
 
@@ -44,8 +44,10 @@ export class Transactions implements OnInit {
     'reference',
     'productId',
     'originChannel',
+    'rail',
     'paymentOption',
     'payerPhone',
+    'memberName',
     'amount',
     'status',
     'date'
@@ -56,14 +58,20 @@ export class Transactions implements OnInit {
     return !term ? this.transactions : this.transactions.filter(transaction =>
       [
         transaction.reference,
-        transaction.productId.toString(),
+        transaction.productId,
+        transaction.rail,
         transaction.originChannel,
         transaction.paymentOption,
         transaction.payerPhone,
-        transaction.amount.toString(),
+        this.memberNameOf(transaction),
+        transaction.amount,
         transaction.status
-      ].some(value => value.toLowerCase().includes(term))
+      ].some(value => String(value ?? '').toLowerCase().includes(term))
     );
+  }
+
+  memberNameOf(transaction: Transaction): string {
+    return transactionMemberName(transaction);
   }
 
   dateOf(transaction: Transaction): string {
@@ -109,7 +117,7 @@ export class Transactions implements OnInit {
 
   exportToPdf(): void {
     const exportData = this.getExportData();
-    const columns = ['reference', 'productId', 'originChannel', 'paymentOption', 'payerPhone', 'amount', 'status', 'date'];
+    const columns = ['reference', 'productId', 'originChannel', 'rail', 'paymentOption', 'payerPhone', 'memberName', 'amount', 'status', 'date'];
     const title = 'Transactions Report';
 
     this.exportService.exportToPdf(
@@ -125,8 +133,10 @@ export class Transactions implements OnInit {
       reference: transaction.reference,
       productId: transaction.productId,
       originChannel: transaction.originChannel,
+      rail: transaction.rail,
       paymentOption: transaction.paymentOption,
       payerPhone: transaction.payerPhone,
+      memberName: this.memberNameOf(transaction),
       amount: transaction.amount,
       status: transaction.status,
       date: new Date(this.dateOf(transaction)).toLocaleDateString()

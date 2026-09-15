@@ -14,7 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 
-import { AnalyticsTxn } from '../../core/models/analytics';
+import { Transaction, transactionMemberName } from '../../core/models/transactions';
 
 /**
  * Paginated transaction log dropped below a dashboard's charts. Given a
@@ -38,7 +38,7 @@ import { AnalyticsTxn } from '../../core/models/analytics';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TransactionsTable {
-  readonly transactions = input.required<AnalyticsTxn[]>();
+  readonly transactions = input.required<Transaction[]>();
 
   readonly searchTerm = signal('');
   readonly pageIndex = signal(0);
@@ -46,16 +46,29 @@ export class TransactionsTable {
 
   readonly pageSizeOptions = [5, 10, 25];
   readonly displayedColumns = [
-    'businessUnit',
-    'branch',
-    'paymentMethod',
-    'channel',
+    'reference',
+    'productId',
+    'originChannel',
+    'paymentOption',
+    'payerPhone',
+    'memberName',
     'amount',
+    'status',
     'date',
   ];
 
+  dateOf(transaction: Transaction): string {
+    return transaction.completedAt ?? transaction.initiatedAt ?? transaction.createdAt;
+  }
+
+  memberNameOf(transaction: Transaction): string {
+    return transactionMemberName(transaction);
+  }
+
   private readonly sorted = computed(() =>
-    [...this.transactions()].sort((a, b) => b.timestamp - a.timestamp)
+    [...this.transactions()].sort(
+      (a, b) => new Date(this.dateOf(b)).getTime() - new Date(this.dateOf(a)).getTime()
+    )
   );
 
   readonly filtered = computed(() => {
@@ -63,8 +76,8 @@ export class TransactionsTable {
     const rows = this.sorted();
     if (!term) return rows;
     return rows.filter((t) =>
-      [t.businessUnit, t.branch, t.paymentMethod, t.channel, t.amount.toString()]
-        .some((value) => value.toLowerCase().includes(term))
+      [t.reference, t.productId, t.originChannel, t.paymentOption, t.payerPhone, this.memberNameOf(t), t.amount, t.status]
+        .some((value) => String(value ?? '').toLowerCase().includes(term))
     );
   });
 

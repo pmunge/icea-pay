@@ -76,6 +76,10 @@ tr.mat-mdc-row:hover {
     font-weight: 500;
 }
 
+.status.inactive {
+    color: var(--app-muted);
+}
+
 .empty-state {
     padding: 48px 24px;
     color: var(--app-muted);

@@ -1,8 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../../environments/env';
 
-import { paybillsRequest, paybillsResponse } from '../models/paybills';
+import { Paybill, PaybillRequest } from '../models/paybills';
+
+interface ApiResponse<T> {
+  status: number;
+  success: boolean;
+  message: string;
+  data: T;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,24 +18,29 @@ import { paybillsRequest, paybillsResponse } from '../models/paybills';
 export class FinanceService {
   private http = inject(HttpClient);
 
-  private readonly apiUrl = 'http://localhost:3000/paybills';
+  private readonly apiUrl = `${environment.apiUrl}/paybills`;
 
-  createPaybill(paybill: paybillsRequest): Observable<paybillsResponse> {
-    return this.http.post<paybillsResponse>(this.apiUrl, paybill);
+  getPaybills(): Observable<Paybill[]> {
+    return this.http
+      .get<ApiResponse<Paybill[]>>(this.apiUrl)
+      .pipe(map((res) => res.data));
   }
 
-  // Get all paybills
-  getPaybills(): Observable<paybillsResponse[]> {
-    return this.http.get<paybillsResponse[]>(this.apiUrl);
+  createPaybill(paybill: PaybillRequest): Observable<Paybill> {
+    return this.http
+      .post<ApiResponse<Paybill>>(this.apiUrl, paybill)
+      .pipe(map((res) => res.data));
   }
 
-  // Update paybill (partial - e.g. amount, status)
-  updatePaybill(id: string, paybill: Partial<paybillsRequest>): Observable<paybillsResponse> {
-    return this.http.patch<paybillsResponse>(`${this.apiUrl}/${id}`, paybill);
+  updatePaybill(id: number, paybill: PaybillRequest): Observable<Paybill> {
+    return this.http
+      .put<ApiResponse<Paybill>>(`${this.apiUrl}/${id}`, paybill)
+      .pipe(map((res) => res.data));
   }
 
-  // Delete paybill
-  deletePaybill(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deletePaybill(id: number): Observable<void> {
+    return this.http
+      .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
+      .pipe(map(() => void 0));
   }
 }

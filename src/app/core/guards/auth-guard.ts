@@ -61,3 +61,16 @@ export const overviewGuard: CanActivateFn = () => {
   const role = auth.getRole();
   return role === 'HQ' ? true : router.parseUrl(auth.homeRoute(role));
 };
+
+/**
+ * Guards a branch dashboard route (/branches/:slug). Any signed-in staff
+ * member may open a branch's dashboard — the branch shown is resolved
+ * straight from the URL slug (see BranchDashboard), not from a per-role
+ * lookup, since not every role can call the staff-list endpoint.
+ */
+export const branchGuard: CanActivateFn = () => {
+  const auth = inject(AuthService);
+  const router = inject(Router);
+
+  return auth.isAuthenticated() ? true : router.parseUrl('/login');
+};

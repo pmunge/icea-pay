@@ -23,17 +23,3 @@ export const ROLE_HOME_ROUTE: Record<UserRole, string> = {
   MEDICAL: '/dashboard/health',
   INVEST: '/dashboard/investment',
 };
-
-export interface Users {
-    id?: number;
-    type: 'personal' | 'business';
-    fname: string;
-    lname: string;
-    branch: string;
-    department: string;
-    email: string;
-    phone: string;
-    role: UserRole;
-    password?: string;
-    status: 'Active' | 'Inactive';
-}

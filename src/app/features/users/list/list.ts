@@ -10,8 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { Users } from '../../../core/models/users';
-import { UsersService } from '../../../core/services/users';
+import { forkJoin } from 'rxjs';
+
+import { Staff } from '../../../core/models/staff';
+import { StaffService } from '../../../core/services/staff';
+import { Branch } from '../../../core/services/branch';
 import { Form } from '../form/form';
 
 @Component({
@@ -32,47 +35,70 @@ import { Form } from '../form/form';
   styleUrl: './list.scss'
 })
 export class List implements OnInit {
-  private readonly usersService = inject(UsersService);
+  private readonly staffService = inject(StaffService);
+  private readonly branchService = inject(Branch);
   private readonly dialog = inject(MatDialog);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  users: Users[] = [];
+
+  staff: Staff[] = [];
+  branchNames = new Map<number, string>();
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['fname', 'lname', 'branch','department', 'email', 'phone', 'role', 'status'];
-  get filteredProducts(): Users[] {
+  readonly displayedColumns = ['username', 'name', 'email', 'phone', 'role', 'branch', 'status'];
+
+  get filteredStaff(): Staff[] {
     const term = this.searchTerm.trim().toLowerCase();
-    return !term ? this.users : this.users.filter(user => [user.fname, user.lname, user.branch, user.department, user.email, user.phone, user.role, user.status].some(value => value.toLowerCase().includes(term)));
+    if (!term) return this.staff;
+
+    return this.staff.filter(member =>
+      [member.username, member.firstName, member.surName, member.email, member.phoneNumber, member.role, member.status]
+        .some(value => (value ?? '').toLowerCase().includes(term))
+    );
   }
-  get pagedUsers(): Users[] {
+
+  get pagedStaff(): Staff[] {
     const start = this.pageIndex * this.pageSize;
-    return this.filteredProducts.slice(start, start + this.pageSize);
+    return this.filteredStaff.slice(start, start + this.pageSize);
   }
+
   ngOnInit(): void {
-    this.loadUsers();
+    this.loadStaff();
   }
-  loadUsers(): void {
-    this.usersService.getUsers('business').subscribe({
-      next: users => {
-        this.users = users;
+
+  loadStaff(): void {
+    forkJoin({
+      staff: this.staffService.getStaff(),
+      branches: this.branchService.getBranches(false)
+    }).subscribe({
+      next: ({ staff, branches }) => {
+        this.staff = staff;
+        this.branchNames = new Map(branches.filter(b => b.id != null).map(b => [b.id!, b.name]));
         this.changeDetectorRef.markForCheck();
       },
-      error: error => console.error('Failed to load business users', error)
+      error: error => console.error('Failed to load users', error)
     });
   }
+
+  branchNameFor(member: Staff): string {
+    return member.branchId != null ? this.branchNames.get(member.branchId) ?? `#${member.branchId}` : '—';
+  }
+
   applySearch(): void {
     this.pageIndex = 0;
   }
+
   changePage(event: PageEvent): void {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }
+
   openCreateDialog(): void {
     this.dialog.open(Form, { width: '560px', maxWidth: 'calc(100vw - 32px)' })
       .afterClosed()
       .subscribe(created => {
-        if (created) this.loadUsers();
+        if (created) this.loadStaff();
       });
   }
 }

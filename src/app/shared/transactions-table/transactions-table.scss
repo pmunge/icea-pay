@@ -39,7 +39,12 @@
 
 .txn-table {
   width: 100%;
-  min-width: 720px;
+  min-width: 920px;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 500;
 }
 
 th.mat-mdc-header-cell {

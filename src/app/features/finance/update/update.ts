@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -9,13 +9,16 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
   MatDialogRef
 } from '@angular/material/dialog';
 
-import { paybillsResponse } from '../../../core/models/paybills';
+import { BusinessLine } from '../../../core/models/business-line';
+import { PAYBILL_PROVIDERS, Paybill } from '../../../core/models/paybills';
+import { BusinessLineService } from '../../../core/services/business-line-service';
 import { FinanceService } from '../../../core/services/finance-service';
 import { ConfirmationService } from '../../../core/services/confirmation';
 
@@ -28,6 +31,7 @@ import { ConfirmationService } from '../../../core/services/confirmation';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatDialogModule
   ],
 
@@ -35,26 +39,51 @@ import { ConfirmationService } from '../../../core/services/confirmation';
 
   styleUrl: './update.scss'
 })
-export class Update {
+export class Update implements OnInit {
 
   private fb = inject(FormBuilder);
 
   private financeService = inject(FinanceService);
 
+  private businessLineService = inject(BusinessLineService);
+
   private confirmationService = inject(ConfirmationService);
 
   private dialogRef = inject(MatDialogRef<Update>);
 
-  paybill: paybillsResponse = inject(MAT_DIALOG_DATA);
+  paybill: Paybill = inject(MAT_DIALOG_DATA);
+
+  readonly businessLines = signal<BusinessLine[]>([]);
+
+  readonly providers = PAYBILL_PROVIDERS;
 
   saving = false;
 
   updateForm = this.fb.nonNullable.group({
+    paybillNumber: [
+      this.paybill.paybillNumber,
+      Validators.required
+    ],
+    provider: [
+      this.paybill.provider,
+      Validators.required
+    ],
     amount: [
       this.paybill.amount,
-      [Validators.required, Validators.min(0)]
+      Validators.required
+    ],
+    businessLineId: [
+      this.paybill.businessLineId,
+      Validators.required
     ]
   });
+
+  ngOnInit(): void {
+    this.businessLineService.getBusinessLines().subscribe({
+      next: (businessLines) => this.businessLines.set(businessLines),
+      error: (error) => console.error('Failed to load business lines', error)
+    });
+  }
 
   async save(): Promise<void> {
     if (this.updateForm.invalid) {
@@ -62,14 +91,14 @@ export class Update {
       return;
     }
 
-    const confirmed = await this.confirmationService.confirmUpdate(this.paybill.MoMo);
+    const confirmed = await this.confirmationService.confirmUpdate(this.paybill.paybillNumber);
     if (!confirmed) return;
 
-    const { amount } = this.updateForm.getRawValue();
+    const payload = this.updateForm.getRawValue();
     this.saving = true;
 
     this.financeService
-      .updatePaybill(this.paybill.id, { amount })
+      .updatePaybill(this.paybill.id!, payload)
       .subscribe({
         next: (updatedPaybill) => {
           this.saving = false;

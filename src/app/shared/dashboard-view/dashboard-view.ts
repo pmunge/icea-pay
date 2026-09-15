@@ -17,12 +17,12 @@ import {
   TimeGranularity,
 } from '../../core/models/analytics';
 import {
-  applyScope,
   Breakdown,
   computeDashboard,
   GRANULARITY_LABELS,
   TIME_GRANULARITIES,
 } from '../../core/data/dashboard-analytics';
+import { Transaction } from '../../core/models/transactions';
 import { TransactionsTable } from '../transactions-table/transactions-table';
 
 /** Line-series colours — one per business unit (matches the unit dashboards). */
@@ -58,6 +58,8 @@ const PIE_PALETTES = [
 })
 export class DashboardView {
   readonly transactions = input.required<AnalyticsTxn[]>();
+  /** Real (non-synthetic) transactions for the log table below the charts. */
+  readonly realTransactions = input<Transaction[]>([]);
   readonly scope = input<DashboardScope>({});
   readonly title = input('Group Performance Dashboard');
   readonly subtitle = input(
@@ -88,11 +90,6 @@ export class DashboardView {
   );
 
   readonly scopedToUnit = computed(() => !!this.scope().businessUnit);
-
-  /** The full (not time-windowed) transaction list for this scope's log table. */
-  readonly scopedTransactions = computed(() =>
-    applyScope(this.transactions(), this.scope())
-  );
 
   readonly visibleUnitTotals = computed(() => {
     const unit = this.scope().businessUnit;

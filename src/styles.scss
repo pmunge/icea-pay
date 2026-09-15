@@ -65,3 +65,42 @@ body {
 .swal2-container {
   z-index: 10000 !important;
 }
+
+/* Table data is still being fetched. The spinner follows the supplied loader
+   design and is applied to every visible table container. */
+body.is-table-loading .table-container {
+  position: relative;
+  min-height: 160px;
+}
+
+body.is-table-loading .table-container::before {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  content: '';
+  background: rgb(255 255 255 / 72%);
+}
+
+body.is-table-loading .table-container::after {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  padding: 8px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  content: '';
+  background: #25b09b;
+  transform: translate(-50%, -50%);
+  --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+  mask: var(--_m);
+  -webkit-mask-composite: source-out;
+  mask-composite: subtract;
+  animation: table-loader-spin 1s infinite linear;
+}
+
+@keyframes table-loader-spin {
+  to { transform: translate(-50%, -50%) rotate(1turn); }
+}

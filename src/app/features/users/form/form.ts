@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -9,12 +9,15 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { finalize } from 'rxjs/operators';
 
-import { UserRole, Users } from '../../../core/models/users';
-import { UsersService } from '../../../core/services/users';
-import { BUSINESS_UNITS } from '../../../core/models/analytics';
+import { Branches } from '../../../core/models/branch';
+import { Branch } from '../../../core/services/branch';
+import { StaffService } from '../../../core/services/staff';
+import { AuthService } from '../../../core/services/auth';
 
 
 @Component({
@@ -26,6 +29,7 @@ import { BUSINESS_UNITS } from '../../../core/models/analytics';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatProgressSpinnerModule,
     MatSelectModule,
     MatDialogModule
   ],
@@ -34,78 +38,68 @@ import { BUSINESS_UNITS } from '../../../core/models/analytics';
 
   styleUrl: './form.scss'
 })
-export class Form {
+export class Form implements OnInit {
 
   private fb = inject(FormBuilder);
 
-  private usersService = inject(UsersService);
+  private authService = inject(AuthService);
+
+  private staffService = inject(StaffService);
+
+  private branchService = inject(Branch);
 
   private dialogRef =
     inject(MatDialogRef<Form>);
 
-  readonly businessUnits = BUSINESS_UNITS;
+  readonly roles = signal<string[]>([]);
+
+  readonly branches = signal<Branches[]>([]);
+
+  readonly saving = signal(false);
 
   usersForm = this.fb.nonNullable.group({
-    fname: [
-      '',
-      Validators.required
-    ],
-    lname: [
-      '',
-      Validators.required
-    ],
-    branch: [
-      '',
-      Validators.required
-    ],
-    department: [
-      '',
-      Validators.required
-    ],
-    email: [
-      '',
-      Validators.required
-    ],
-    phone: [
-      '',
-      Validators.required
-    ],
-    role: [
-      'HQ' as UserRole,
-      Validators.required
-    ],
-    status: [
-      'Active' as 'Active' | 'Inactive',
-      Validators.required
-    ]
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    firstName: ['', Validators.required],
+    middleName: [''],
+    surName: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    role: ['', Validators.required],
+    phoneNumber: [''],
+    idNumber: [''],
+    county: [''],
+    branchId: [null as number | null]
   });
+
+  ngOnInit(): void {
+    this.staffService.getAllowedRoles().subscribe({
+      next: (roles) => this.roles.set(roles),
+      error: (error) => console.error('Failed to load allowed roles', error)
+    });
+
+    this.branchService.getBranches(true).subscribe({
+      next: (branches) => this.branches.set(branches),
+      error: (error) => console.error('Failed to load branches', error)
+    });
+  }
+
   save(): void {
     if (this.usersForm.invalid) {
       this.usersForm.markAllAsTouched();
       return;
     }
-    const user: Users = {
-      ...this.usersForm.getRawValue(),
-      type: 'business'
-    };
-    this.usersService
-      .createUser(user)
+
+    const { branchId, ...rest } = this.usersForm.getRawValue();
+    this.saving.set(true);
+
+    this.authService
+      .register({ ...rest, branchId: branchId ?? undefined })
+      .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
         next: (createdUser) => {
-          console.log(
-            'User created:',
-            createdUser
-          );
-
-          this.dialogRef.close(
-            createdUser
-          );
+          this.dialogRef.close(createdUser);
         },
         error: (error) => {
-          console.error(
-            'Failed to create product',
-            error
-          );
+          console.error('Failed to create user', error);
         }
       });
   }

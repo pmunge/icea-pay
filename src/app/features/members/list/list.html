@@ -2,35 +2,48 @@
     <header class="page-header">
         <div>
             <h1>Members Management</h1>
-            <p>View all Members.</p>
+            <p>{{ isHQ ? 'View all members.' : 'View members registered at your branch.' }}</p>
         </div>
     </header>
     <mat-card class="product-card">
         <mat-form-field appearance="outline" class="search-field"><mat-label>Search members</mat-label><input matInput
                 [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
-                placeholder="name, national ID, phone or status"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+                placeholder="Name, member no., national ID or phone"><mat-icon matSuffix>search</mat-icon></mat-form-field>
         <div class="table-container">
             <table mat-table [dataSource]="pagedMembers" class="product-table">
-                <ng-container matColumnDef="name">
+                <ng-container matColumnDef="memberNo">
+                    <th mat-header-cell *matHeaderCellDef>Member No.</th>
+                    <td mat-cell *matCellDef="let member">{{ member.memberNo }}</td>
+                </ng-container><ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>Member</th>
-                    <td mat-cell *matCellDef="let member">{{ member.name }}</td>
+                    <td mat-cell *matCellDef="let member">{{ member.firstName }} {{ member.otherNames }}</td>
                 </ng-container><ng-container matColumnDef="nationalId">
                     <th mat-header-cell *matHeaderCellDef>NationalID</th>
                     <td mat-cell *matCellDef="let member">{{ member.nationalId }}</td>
                 </ng-container><ng-container matColumnDef="phone">
                     <th mat-header-cell *matHeaderCellDef>Phone</th>
-                    <td mat-cell *matCellDef="let member">{{ member.phone}}</td>
+                    <td mat-cell *matCellDef="let member">{{ member.phoneNumber }}</td>
+                </ng-container><ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef>Role</th>
+                    <td mat-cell *matCellDef="let member">{{ member.role }}</td>
                 </ng-container><ng-container matColumnDef="status">
                     <th mat-header-cell *matHeaderCellDef>Status</th>
                     <td mat-cell *matCellDef="let member"><span class="status"
-                            [class.inactive]="member.status === 'Inactive'">{{ member.status }}</span></td>
+                            [class.inactive]="member.status !== 'ACTIVE'">{{ member.status }}</span></td>
+                </ng-container><ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Actions</th>
+                    <td mat-cell *matCellDef="let member">
+                        <button mat-icon-button type="button" aria-label="View member" (click)="openView(member)">
+                            <mat-icon>visibility</mat-icon>
+                        </button>
+                    </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-            </table>@if (!filteredMembers.length) { <div class="empty-state">No members match your search.
+            </table>@if (!pagedMembers.length) { <div class="empty-state">No members match your search.
             </div> }
         </div>
-        <mat-paginator [length]="filteredMembers.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
+        <mat-paginator [length]="members.length" [pageIndex]="pageIndex" [pageSize]="pageSize"
             [pageSizeOptions]="pageSizeOptions" (page)="changePage($event)"
             aria-label="Members pagination"></mat-paginator>
     </mat-card>

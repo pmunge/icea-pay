@@ -1,15 +1,19 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map, throwError } from 'rxjs';
+import { Observable, catchError, map, of, shareReplay, switchMap, throwError } from 'rxjs';
 import { environment } from '../../../environments/env';
 
 import { ROLE_HOME_ROUTE, UserRole } from '../models/users';
+import { StaffRegisterRequest } from '../models/staff';
+import { StaffService } from './staff';
+import { Branches } from '../models/branch';
+import { Branch } from './branch';
 
 const STORAGE_KEY = 'auth_user';
 const TOKEN_KEY = 'auth_token';
 
 /** Shape of `data` on every /auth/* response. */
-interface AuthResponseData {
+export interface AuthResponseData {
   token: string;
   staffId: string;
   username: string;
@@ -39,6 +43,8 @@ export interface AuthUser {
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private staffService = inject(StaffService);
+  private branchService = inject(Branch);
   private readonly authUrl = `${environment.apiUrl}/auth`;
 
   /** Currently logged-in user, restored from localStorage on startup. */
@@ -46,6 +52,9 @@ export class AuthService {
 
   /** Email awaiting OTP verification, set once /auth/login accepts credentials. */
   private readonly pendingEmail = signal<string | null>(null);
+
+  /** Cached resolution of the signed-in staff member's own branch — reset on login/logout. */
+  private myBranch$?: Observable<Branches | null>;
 
   /**
    * Step 1 of login: POST the credentials to the backend. On success the
@@ -68,6 +77,23 @@ export class AuthService {
             this.completeLogin(res.data);
           }
 
+          return res.data;
+        })
+      );
+  }
+
+  /**
+   * Create a new staff login (HQ only). The backend auto-generates the
+   * initial password and emails it to the new staff member.
+   */
+  register(payload: StaffRegisterRequest): Observable<AuthResponseData> {
+    return this.http
+      .post<ApiResponse<AuthResponseData>>(`${this.authUrl}/register`, payload)
+      .pipe(
+        map((res) => {
+          if (!res.success) {
+            throw new Error(res.message || 'Failed to register staff member');
+          }
           return res.data;
         })
       );
@@ -108,6 +134,7 @@ export class AuthService {
   }
 
   private completeLogin(data: AuthResponseData): void {
+    this.myBranch$ = undefined;
     localStorage.setItem(TOKEN_KEY, data.token);
     this.storeUser({
       staffId: data.staffId,
@@ -123,6 +150,7 @@ export class AuthService {
   }
 
   logout(): void {
+    this.myBranch$ = undefined;
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(TOKEN_KEY);
     this.currentUser.set(null);
@@ -137,9 +165,40 @@ export class AuthService {
     return this.currentUser()?.role ?? null;
   }
 
-  /** Default landing route for a given role — the dashboard for its business unit. */
+  /**
+   * Default landing route for a given role — the dashboard for its business
+   * unit. Falls back to /unauthorized for a role the backend can return but
+   * this app doesn't have a mapped dashboard for, rather than navigating to
+   * `undefined` (ROLE_HOME_ROUTE is typed as exhaustive but isn't at runtime).
+   */
   homeRoute(role: UserRole | null = this.getRole()): string {
-    return role ? ROLE_HOME_ROUTE[role] : '/dashboard';
+    if (!role) return '/dashboard';
+    return ROLE_HOME_ROUTE[role] ?? '/unauthorized';
+  }
+
+  /**
+   * The signed-in staff member's own branch, resolved from /staff since the
+   * login response itself doesn't carry it. Null for HQ (branch-less) or if
+   * the lookup fails. Cached for the lifetime of the session.
+   */
+  getMyBranch(): Observable<Branches | null> {
+    const staffId = this.currentUser()?.staffId;
+    if (!staffId) return of(null);
+
+    if (!this.myBranch$) {
+      this.myBranch$ = this.staffService.getStaff().pipe(
+        map((staff) => staff.find((member) => member.id === staffId)?.branchId ?? null),
+        switchMap((branchId) => (branchId != null ? this.branchService.getBranch(branchId) : of(null))),
+        catchError(() => of(null)),
+        shareReplay(1)
+      );
+    }
+
+    return this.myBranch$;
+  }
+
+  getMyBranchId(): Observable<number | null> {
+    return this.getMyBranch().pipe(map((branch) => branch?.id ?? null));
   }
 
   private storeUser(user: AuthUser): void {

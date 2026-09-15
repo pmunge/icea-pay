@@ -43,7 +43,7 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['name', 'businessUnit', 'paybill', 'accountNumber', 'description', 'status', 'actions'];
+  readonly displayedColumns = ['name', 'businessUnit', 'description', 'status', 'actions'];
 
   unitOf(product: Product): string {
     return businessLineName(product.businessLineId) ?? 'Unknown';
@@ -56,7 +56,7 @@ export class List implements OnInit {
   get filteredProducts(): Product[] {
     const term = this.searchTerm.trim().toLowerCase();
     return !term ? this.products : this.products.filter(product =>
-      [product.name, this.unitOf(product), product.paybill, product.accountNumber, product.description, this.statusOf(product)]
+      [product.name, this.unitOf(product), product.description, this.statusOf(product)]
         .some(value => value.toLowerCase().includes(term)));
   }
   get pagedProducts(): Product[] {

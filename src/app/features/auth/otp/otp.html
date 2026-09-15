@@ -8,8 +8,8 @@
     </header>
 
     <div class="form-wrap">
-      <h1 class="title">Verify it's you</h1>
-      <p class="subtitle">Enter the 6-digit one-time password to finish signing in</p>
+      <h1 class="title">ICEA PAY</h1>
+      <p class="subtitle">Check email for 6-digit one time password</p>
 
       @if (infoMessage()) {
       <p class="form-info">{{ infoMessage() }}</p>
@@ -19,12 +19,7 @@
 
         <label class="field">
           <span class="field-label">One-time password</span>
-          <input
-            type="text"
-            inputmode="numeric"
-            autocomplete="one-time-code"
-            maxlength="6"
-            placeholder="123456"
+          <input type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456"
             formControlName="code">
           @if (otpForm.controls.code.touched && otpForm.controls.code.invalid) {
           <span class="field-error">Enter the 6-digit code</span>
@@ -55,7 +50,7 @@
     <div class="image-overlay">
       <span class="overlay-top">ICEA LION</span>
       <div class="overlay-bottom">
-        <h2 class="overlay-heading">Insurance Portal</h2>
+        <h2 class="overlay-heading">ICEA PAY</h2>
         <p class="overlay-text">
           A one-time password keeps your account secure. It expires after use,
           so request a fresh one any time.
