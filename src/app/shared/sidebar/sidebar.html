@@ -124,11 +124,12 @@
 
             </div>
             }
+            <!--
             <button mat-list-item class="nav-parent" [class.is-open]="branchOpen" type="button"
                 (click)="toggleBranch()">
                 <mat-icon matListItemIcon>account_balance</mat-icon>
                 <span matListItemTitle>Branch</span>
-            </button>
+            </button> -->
             @if (branchOpen) {
             <div class="sub-menu nested-menu">
                 <a mat-list-item routerLink="/branchList" routerLinkActive="active">

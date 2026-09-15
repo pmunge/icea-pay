@@ -10,10 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { forkJoin } from 'rxjs';
 
 import { FinanceService } from '../../../core/services/finance-service';
-import { BusinessLineService } from '../../../core/services/business-line-service';
 import { Paybill } from '../../../core/models/paybills';
 import { Form } from '../form/form';
 import { Update } from '../update/update';
@@ -37,17 +35,15 @@ import { Update } from '../update/update';
 })
 export class List implements OnInit {
   private readonly financeService = inject(FinanceService);
-  private readonly businessLineService = inject(BusinessLineService);
   private readonly dialog = inject(MatDialog);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
   paybills: Paybill[] = [];
-  businessLineNames = new Map<number, string>();
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['index', 'paybillNumber', 'provider', 'countryCode', 'actions'];
+  readonly displayedColumns = ['index', 'paybillNumber', 'provider', 'countryCode'];
 
   get filteredPaybills(): Paybill[] {
     const term = this.searchTerm.trim().toLowerCase();
@@ -70,13 +66,9 @@ export class List implements OnInit {
   }
 
   loadPaybills(): void {
-    forkJoin({
-      paybills: this.financeService.getPaybills(),
-      businessLines: this.businessLineService.getBusinessLines()
-    }).subscribe({
-      next: ({ paybills, businessLines }) => {
+    this.financeService.getPaybills().subscribe({
+      next: paybills => {
         this.paybills = paybills;
-        this.businessLineNames = new Map(businessLines.map(line => [line.id, line.name]));
         this.changeDetectorRef.markForCheck();
       },
       error: error => console.error('Failed to load paybills', error)
