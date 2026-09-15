@@ -12,6 +12,10 @@
         placeholder="Role name"><mat-icon matSuffix>search</mat-icon></mat-form-field>
     <div class="table-container">
       <table mat-table [dataSource]="pagedRoles" class="product-table">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container>
         <ng-container matColumnDef="role">
           <th mat-header-cell *matHeaderCellDef>Role</th>
           <td mat-cell *matCellDef="let role"><strong>{{ role.role }}</strong></td>

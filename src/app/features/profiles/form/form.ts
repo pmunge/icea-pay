@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core'
+import { Component, OnInit, inject, signal } from '@angular/core'
 
 import {
   FormBuilder,
@@ -11,10 +11,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
-import { Profile } from '../../../core/services/profile';
+import { PROFILE_STATUSES } from '../../../core/models/profile';
+import { RoleEntity } from '../../../core/models/roles';
+import { ProfileService } from '../../../core/services/profile';
+import { StaffService } from '../../../core/services/staff';
 
 @Component({
   selector: 'app-profile-form',
@@ -25,25 +29,50 @@ import { Profile } from '../../../core/services/profile';
     MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
+    MatSelectModule,
     MatDialogModule
   ],
   templateUrl: './form.html',
   styleUrl: './form.scss',
 })
-export class Form {
+export class Form implements OnInit {
   private fb = inject(FormBuilder)
-  private profileService = inject(Profile);
+  private profileService = inject(ProfileService);
+  private staffService = inject(StaffService);
 
   private dialogRef = inject(MatDialogRef<Form>);
+
+  readonly statuses = PROFILE_STATUSES;
+
+  readonly roles = signal<RoleEntity[]>([]);
 
   saving = false;
 
   profilesForm = this.fb.nonNullable.group({
-    profile: [
+    name: [
       '',
+      Validators.required
+    ],
+    description: [
+      '',
+      Validators.required
+    ],
+    status: [
+      'Active',
+      Validators.required
+    ],
+    roles: [
+      [] as string[],
       Validators.required
     ]
   });
+
+  ngOnInit(): void {
+    this.staffService.getAllowedRoles().subscribe({
+      next: (roles) => this.roles.set(roles),
+      error: (error) => console.error('Failed to load allowed roles', error)
+    });
+  }
 
   save(): void {
     if (this.profilesForm.invalid) {
@@ -51,11 +80,11 @@ export class Form {
       return;
     }
 
-    const { profile } = this.profilesForm.getRawValue();
+    const profile = this.profilesForm.getRawValue();
     this.saving = true;
 
     this.profileService
-      .createProfiles({ profile })
+      .createProfile(profile)
       .pipe(finalize(() => this.saving = false))
       .subscribe({
         next: (createdProfile) => {

@@ -48,7 +48,7 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['permission', 'role'];
+  readonly displayedColumns = ['index', 'permission', 'role'];
 
   get filteredPermissions(): Permissions[] {
     const term = this.searchTerm.trim().toLowerCase();

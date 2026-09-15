@@ -8,6 +8,10 @@ export interface Product {
   active: boolean;
   createdAt?: string;
   updatedAt?: string;
+  /** Server-assigned ordering; never set or displayed on the client. */
+  displayOrder?: number;
+  description: string;
+  code: string;
 }
 
 /** Fixed backend id for each business line. */

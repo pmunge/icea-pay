@@ -10,10 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import { forkJoin } from 'rxjs';
-
-import { FinanceService } from '../../../core/services/finance-service';
-import { Paybill } from '../../../core/models/paybills';
+import { WalletService } from '../../../core/services/wallet-service';
+import { WalletBalance } from '../../../core/models/wallet';
 import { Update } from '../update/update';
 
 @Component({
@@ -35,29 +33,29 @@ import { Update } from '../update/update';
   styleUrl: './withdraw.scss',
 })
 export class Withdraw implements OnInit {
-  private readonly financeService = inject(FinanceService);
+  private readonly walletService = inject(WalletService);
   private readonly dialog = inject(MatDialog);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  paybills: Paybill[] = [];
+  paybills: WalletBalance[] = [];
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['paybillNumber', 'provider', 'amount', 'actions'];
+  readonly displayedColumns = ['index', 'paybillNo', 'provider', 'balance', 'actions'];
 
-  get filteredPaybills(): Paybill[] {
+  get filteredPaybills(): WalletBalance[] {
     const term = this.searchTerm.trim().toLowerCase();
     return !term
       ? this.paybills
       : this.paybills.filter(paybill =>
-        [paybill.paybillNumber, paybill.provider, paybill.amount].some(value =>
+        [paybill.paybillNo, paybill.provider, paybill.balance].some(value =>
           String(value ?? '').toLowerCase().includes(term)
         )
       );
   }
 
-  get pagedPaybills(): Paybill[] {
+  get pagedPaybills(): WalletBalance[] {
     const start = this.pageIndex * this.pageSize;
     return this.filteredPaybills.slice(start, start + this.pageSize);
   }
@@ -67,14 +65,12 @@ export class Withdraw implements OnInit {
   }
 
   loadPaybills(): void {
-    forkJoin({
-      paybills: this.financeService.getPaybills(),
-    }).subscribe({
-      next: ({ paybills }) => {
+    this.walletService.getBalances().subscribe({
+      next: paybills => {
         this.paybills = paybills;
         this.changeDetectorRef.markForCheck();
       },
-      error: error => console.error('Failed to load paybills', error)
+      error: error => console.error('Failed to load paybill balances', error)
     });
   }
 
@@ -87,7 +83,7 @@ export class Withdraw implements OnInit {
     this.pageSize = event.pageSize;
   }
 
-  openWithdrawDialog(paybill: Paybill): void {
+  openWithdrawDialog(paybill: WalletBalance): void {
     this.dialog.open(Update, { width: '420px', maxWidth: 'calc(100vw - 32px)', data: paybill })
       .afterClosed()
       .subscribe(updated => {

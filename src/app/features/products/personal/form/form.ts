@@ -49,12 +49,20 @@ export class Form {
     'Medical'
   ];
   productForm = this.fb.nonNullable.group({
+    code: [
+      '',
+      Validators.required
+    ],
     name: [
       '',
       Validators.required
     ],
     businessUnit: [
       '' as BusinessUnit | '',
+      Validators.required
+    ],
+    description: [
+      '',
       Validators.required
     ],
     status: [

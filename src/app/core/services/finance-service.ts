@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/env';
 
-import { Paybill, PaybillRequest, PaybillAllocate, withdrawPaybill } from '../models/paybills';
+import { Paybill, PaybillRequest } from '../models/paybills';
 
 interface ApiResponse<T> {
   status: number;
@@ -42,16 +42,5 @@ export class FinanceService {
     return this.http
       .delete<ApiResponse<void>>(`${this.apiUrl}/${id}`)
       .pipe(map(() => void 0));
-  }
-  allocatePaybill(allocation: PaybillAllocate): Observable<Paybill> {
-    return this.http
-      .post<ApiResponse<Paybill>>(`${this.apiUrl}/allocate`, allocation)
-      .pipe(map((res) => res.data));
-  }
-
-  withdraw(id: number, withdrawal: withdrawPaybill): Observable<Paybill> {
-    return this.http
-      .post<ApiResponse<Paybill>>(`${this.apiUrl}/${id}/withdraw`, withdrawal)
-      .pipe(map((res) => res.data));
   }
 }

@@ -2,35 +2,26 @@
     Allocate Paybill
 </h2>
 <mat-dialog-content>
+    <dl class="paybill-summary">
+        <div>
+            <dt>Paybill Number</dt>
+            <dd>{{ paybill.paybillNumber }}</dd>
+        </div>
+        <div>
+            <dt>Provider</dt>
+            <dd>{{ paybill.provider }}</dd>
+        </div>
+        <div>
+            <dt>Country Code</dt>
+            <dd>{{ paybill.countryCode }}</dd>
+        </div>
+    </dl>
+    @if (countries().length && countryId() == null) {
+    <p class="country-error">
+        No country matches code "{{ paybill.countryCode }}" — allocation cannot proceed.
+    </p>
+    }
     <form [formGroup]="paybillsForm" class="product-form">
-        <mat-form-field appearance="outline">
-            <mat-label>
-                Paybill Number
-            </mat-label>
-            <input matInput formControlName="paybillNumber" placeholder="Enter paybill number">
-            @if (paybillsForm.controls.paybillNumber.hasError('required')) {
-            <mat-error>
-                Paybill number is required
-            </mat-error>
-            }
-        </mat-form-field>
-        <mat-form-field appearance="outline">
-            <mat-label>
-                Provider
-            </mat-label>
-            <mat-select formControlName="provider">
-                @for (provider of providers; track provider) {
-                <mat-option [value]="provider">
-                    {{ provider }}
-                </mat-option>
-                }
-            </mat-select>
-            @if (paybillsForm.controls.provider.hasError('required')) {
-            <mat-error>
-                Provider is required
-            </mat-error>
-            }
-        </mat-form-field>
         <mat-form-field appearance="outline">
             <mat-label>
                 Business Line
@@ -52,9 +43,9 @@
             <mat-label>
                 Product
             </mat-label>
-            <mat-select formControlName="product" [disabled]="!paybillsForm.controls.businessLineId.value">
+            <mat-select formControlName="productId" [disabled]="!paybillsForm.controls.businessLineId.value">
                 @for (product of availableProducts(); track product.id) {
-                <mat-option [value]="product.name">
+                <mat-option [value]="product.id">
                     {{ product.name }}
                 </mat-option>
                 }
@@ -68,42 +59,20 @@
                 No active products for this business line
             </mat-hint>
             }
-            @if (paybillsForm.controls.product.hasError('required')) {
+            @if (paybillsForm.controls.productId.hasError('required')) {
             <mat-error>
                 Product is required
             </mat-error>
             }
         </mat-form-field>
     </form>
-
-    @if (paybillsForm.controls.paybillNumber.value || paybillsForm.controls.product.value) {
-    <table class="allocation-preview">
-        <thead>
-            <tr>
-                <th>Paybill Number</th>
-                <th>Provider</th>
-                <th>Business Line</th>
-                <th>Product</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>{{ paybillsForm.controls.paybillNumber.value || '—' }}</td>
-                <td>{{ paybillsForm.controls.provider.value || '—' }}</td>
-                <td>
-                    {{ businessLineName(paybillsForm.controls.businessLineId.value) }}
-                </td>
-                <td>{{ paybillsForm.controls.product.value || '—' }}</td>
-            </tr>
-        </tbody>
-    </table>
-    }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
     <button mat-button type="button" (click)="cancel()">
         Cancel
     </button>
-    <button mat-flat-button color="primary" type="button" [disabled]="saving" (click)="save()">
+    <button mat-flat-button color="primary" type="button" [disabled]="saving || countryId() == null"
+        (click)="save()">
         {{ saving ? 'Saving…' : 'Allocate Paybill' }}
     </button>
 </mat-dialog-actions>

@@ -7,10 +7,55 @@
       <mat-label>
         Profile Name
       </mat-label>
-      <input matInput formControlName="profile" placeholder="Enter profile name">
-      @if (profilesForm.controls.profile.hasError('required')) {
+      <input matInput formControlName="name" placeholder="Enter profile name">
+      @if (profilesForm.controls.name.hasError('required')) {
       <mat-error>
         Profile name is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Description
+      </mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter profile description"></textarea>
+      @if (profilesForm.controls.description.hasError('required')) {
+      <mat-error>
+        Description is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Status
+      </mat-label>
+      <mat-select formControlName="status">
+        @for (status of statuses; track status) {
+        <mat-option [value]="status">
+          {{ status }}
+        </mat-option>
+        }
+      </mat-select>
+      @if (profilesForm.controls.status.hasError('required')) {
+      <mat-error>
+        Status is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Roles
+      </mat-label>
+      <mat-select formControlName="roles" multiple>
+        @for (role of roles(); track role.id) {
+        <mat-option [value]="role.name">
+          {{ role.name }}
+        </mat-option>
+        }
+      </mat-select>
+      @if (profilesForm.controls.roles.hasError('required')) {
+      <mat-error>
+        Select at least one role
       </mat-error>
       }
     </mat-form-field>

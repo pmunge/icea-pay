@@ -12,7 +12,10 @@
         placeholder="Name, category, description or status"><mat-icon matSuffix>search</mat-icon></mat-form-field>
     <div class="table-container">
       <table mat-table [dataSource]="pagedChannels" class="product-table">
-        <ng-container matColumnDef="name">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container><ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Channel</th>
           <td mat-cell *matCellDef="let channel"><strong>{{ channel.name }}</strong></td>
         </ng-container><ng-container matColumnDef="category">

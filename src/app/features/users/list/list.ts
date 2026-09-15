@@ -46,7 +46,7 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['username', 'name', 'email', 'phone', 'role', 'branch', 'status'];
+  readonly displayedColumns = ['index', 'username', 'name', 'email', 'phone', 'role', 'branch', 'status'];
 
   get filteredStaff(): Staff[] {
     const term = this.searchTerm.trim().toLowerCase();

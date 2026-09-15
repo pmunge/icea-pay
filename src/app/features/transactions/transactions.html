@@ -18,12 +18,26 @@
     </div>
   </header>
   <mat-card class="product-card">
-    <mat-form-field appearance="outline" class="search-field"><mat-label>Search transactions</mat-label><input matInput
-        [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
-        placeholder="Reference, product, channel, payer or status"><mat-icon
-        matSuffix>search</mat-icon></mat-form-field>
+    <div class="filters-row">
+      <mat-form-field appearance="outline" class="search-field"><mat-label>Search transactions</mat-label><input matInput
+          [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+          placeholder="Reference, product, channel, payer or status"><mat-icon
+          matSuffix>search</mat-icon></mat-form-field>
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Period</mat-label>
+        <mat-select [(ngModel)]="periodFilter" (ngModelChange)="applySearch()">
+          @for (option of periodOptions; track option.value) {
+          <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="table-container">
       <table mat-table [dataSource]="pagedTransactions" class="product-table">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container>
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Date</th>
           <td mat-cell *matCellDef="let transaction">{{ dateOf(transaction) | date:'mediumDate' }}</td>

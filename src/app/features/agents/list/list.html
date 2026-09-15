@@ -12,7 +12,10 @@
                 placeholder="name, agentId, nationalId, phone"><mat-icon matSuffix>search</mat-icon></mat-form-field>
         <div class="table-container">
             <table mat-table [dataSource]="pagedAgents" class="product-table">
-                <ng-container matColumnDef="name">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+                </ng-container><ng-container matColumnDef="name">
                     <th mat-header-cell *matHeaderCellDef>Agent Name</th>
                     <td mat-cell *matCellDef="let agent">{{ agent.name }}</td>
                 </ng-container><ng-container matColumnDef="agentId">

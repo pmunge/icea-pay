@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/env';
 
 import { Staff } from '../models/staff';
+import { RoleEntity } from '../models/roles';
 
 interface ApiResponse<T> {
   status: number;
@@ -26,9 +27,9 @@ export class StaffService {
       .pipe(map((res) => res.data));
   }
 
-  getAllowedRoles(): Observable<string[]> {
+  getAllowedRoles(): Observable<RoleEntity[]> {
     return this.http
-      .get<ApiResponse<string[]>>(`${this.apiUrl}/roles`)
+      .get<ApiResponse<RoleEntity[]>>(`${this.apiUrl}/roles`)
       .pipe(map((res) => res.data));
   }
 

@@ -42,7 +42,7 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['name', 'agentId', 'nationalId', 'station', 'phone', 'status', 'actions'];
+  readonly displayedColumns = ['index', 'name', 'agentId', 'nationalId', 'station', 'phone', 'status', 'actions'];
   get filteredAgents(): Agents[] {
     const term = this.searchTerm.trim().toLowerCase();
     return !term ? this.agents : this.agents.filter(agent => [agent.name, agent.agentId, agent.nationalId, agent.phone, agent.status].some(value => value.toLowerCase().includes(term)));

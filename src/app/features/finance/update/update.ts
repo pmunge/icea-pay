@@ -17,8 +17,8 @@ import {
   MatDialogRef
 } from '@angular/material/dialog';
 
-import { Paybill } from '../../../core/models/paybills';
-import { FinanceService } from '../../../core/services/finance-service';
+import { WalletBalance } from '../../../core/models/wallet';
+import { WalletService } from '../../../core/services/wallet-service';
 import { ConfirmationService } from '../../../core/services/confirmation';
 
 @Component({
@@ -41,15 +41,15 @@ export class Update {
 
   private fb = inject(FormBuilder);
 
-  private financeService = inject(FinanceService);
+  private walletService = inject(WalletService);
 
   private confirmationService = inject(ConfirmationService);
 
   private dialogRef = inject(MatDialogRef<Update>);
 
-  paybill: Paybill = inject(MAT_DIALOG_DATA);
+  paybill: WalletBalance = inject(MAT_DIALOG_DATA);
 
-  readonly currentAmount = this.paybill.amount ?? 0;
+  readonly currentAmount = this.paybill.balance ?? 0;
 
   saving = false;
 
@@ -57,7 +57,8 @@ export class Update {
     adjustAmount: [
       null as number | null,
       [Validators.required, Validators.min(0.01), this.maxWithdrawal(this.currentAmount)]
-    ]
+    ],
+    description: ['']
   });
 
   private maxWithdrawal(max: number) {
@@ -73,29 +74,27 @@ export class Update {
       return;
     }
 
-    const { adjustAmount } = this.withdrawForm.getRawValue();
+    const { adjustAmount, description } = this.withdrawForm.getRawValue();
 
     const confirmed = await this.confirmationService.confirmWithdraw(
-      this.paybill.paybillNumber,
+      this.paybill.paybillNo,
       String(adjustAmount)
     );
     if (!confirmed) return;
 
     this.saving = true;
 
-    this.financeService
-      .withdraw(this.paybill.id!, {
-        paybillNumber: this.paybill.paybillNumber,
-        provider: this.paybill.provider,
-        currentAmount: String(this.currentAmount),
-        adjustAmount: String(adjustAmount)
+    this.walletService
+      .withdraw(this.paybill.paybillNo, {
+        amount: adjustAmount!,
+        ...(description ? { description } : {})
       })
       .subscribe({
-        next: (updatedPaybill) => {
+        next: (transaction) => {
           this.saving = false;
-          this.dialogRef.close(updatedPaybill);
+          this.dialogRef.close(transaction);
         },
-        error: (error) => {
+        error: (error: unknown) => {
           this.saving = false;
           console.error('Failed to withdraw from paybill', error);
         }

@@ -11,15 +11,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
-import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+  MatDialogRef
+} from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
 import { BusinessLine } from '../../../core/models/business-line';
-import { PAYBILL_PROVIDERS } from '../../../core/models/paybills';
+import { Paybill } from '../../../core/models/paybills';
 import { Product } from '../../../core/models/product';
+import { Country } from '../../../core/models/country';
 import { BusinessLineService } from '../../../core/services/business-line-service';
-import { FinanceService } from '../../../core/services/finance-service';
 import { ProductService } from '../../../core/services/product';
+import { CountryService } from '../../../core/services/country-service';
 
 @Component({
   selector: 'app-paybill-form',
@@ -43,39 +48,40 @@ export class AllocatePaybills implements OnInit {
 
   private fb = inject(FormBuilder);
 
-  private financeService = inject(FinanceService);
+  private productService = inject(ProductService);
 
   private businessLineService = inject(BusinessLineService);
 
-  private productService = inject(ProductService);
+  private countryService = inject(CountryService);
 
   private dialogRef =
     inject(MatDialogRef<AllocatePaybills>);
+
+  /** The paybill being routed to a product — already exists, so its own details are read-only here. */
+  readonly paybill: Paybill = inject(MAT_DIALOG_DATA);
 
   readonly businessLines = signal<BusinessLine[]>([]);
 
   readonly products = signal<Product[]>([]);
 
-  readonly providers = PAYBILL_PROVIDERS;
+  readonly countries = signal<Country[]>([]);
+
+  /** The paybill's own country, resolved to its numeric id once the countries list has loaded. */
+  readonly countryId = computed(() => {
+    const code = this.paybill.countryCode?.trim().toLowerCase();
+    return this.countries().find((country) => country.code.toLowerCase() === code)?.id ?? null;
+  });
 
   saving = false;
 
   paybillsForm = this.fb.nonNullable.group({
-    paybillNumber: [
-      '',
-      Validators.required
-    ],
-    provider: [
-      '',
-      Validators.required
-    ],
+    // Client-side filter only for the product dropdown below — never sent to the backend.
     businessLineId: [
       null as number | null,
       Validators.required
     ],
-    //products (from dropdown depending on selected businessline)
-    product: [
-      '',
+    productId: [
+      null as number | null,
       Validators.required
     ]
   });
@@ -102,16 +108,16 @@ export class AllocatePaybills implements OnInit {
       error: (error) => console.error('Failed to load products', error)
     });
 
+    this.countryService.getCountries().subscribe({
+      next: (countries) => this.countries.set(countries),
+      error: (error) => console.error('Failed to load countries', error)
+    });
+
     this.paybillsForm.controls.businessLineId.valueChanges.subscribe((businessLineId) => {
       this.selectedBusinessLineId.set(businessLineId);
       // Selected product no longer belongs to the newly chosen business line.
-      this.paybillsForm.controls.product.setValue('');
+      this.paybillsForm.controls.productId.setValue(null);
     });
-  }
-
-  businessLineName(businessLineId: number | null): string {
-    if (businessLineId == null) return '—';
-    return this.businessLines().find((line) => line.id === businessLineId)?.name ?? '—';
   }
 
   save(): void {
@@ -120,15 +126,25 @@ export class AllocatePaybills implements OnInit {
       return;
     }
 
-    const { paybillNumber, provider, businessLineId, product } = this.paybillsForm.getRawValue();
+    const countryId = this.countryId();
+    if (countryId == null) {
+      console.error(`Could not resolve a country for code "${this.paybill.countryCode}"`);
+      return;
+    }
+
+    const { productId } = this.paybillsForm.getRawValue();
     this.saving = true;
 
-    this.financeService
-      .allocatePaybill({ paybillNumber, provider, businessLineId: businessLineId!, product })
+    this.productService
+      .allocatePaybill(productId!, countryId, {
+        countryId,
+        paybillId: this.paybill.id!,
+        active: true
+      })
       .pipe(finalize(() => this.saving = false))
       .subscribe({
-        next: (allocatedPaybill) => {
-          this.dialogRef.close(allocatedPaybill);
+        next: (routing) => {
+          this.dialogRef.close(routing);
         },
         error: (error) => {
           console.error('Failed to allocate paybill', error);

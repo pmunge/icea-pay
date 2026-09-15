@@ -51,7 +51,7 @@ export class UnitProducts implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['name', 'paybill', 'description', 'status'];
+  readonly displayedColumns = ['index', 'name', 'paybill', 'description', 'status'];
 
   statusOf(product: Product): 'Active' | 'Inactive' {
     return product.active ? 'Active' : 'Inactive';

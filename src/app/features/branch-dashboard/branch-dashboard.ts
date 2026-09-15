@@ -56,7 +56,7 @@ export class BranchDashboard implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['memberNo', 'name', 'phone', 'status'];
+  readonly displayedColumns = ['index', 'memberNo', 'name', 'phone', 'status'];
 
   get pagedMembers(): Members[] {
     const start = this.pageIndex * this.pageSize;

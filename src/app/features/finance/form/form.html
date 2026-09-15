@@ -31,6 +31,23 @@
             </mat-error>
             }
         </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Country
+            </mat-label>
+            <mat-select formControlName="countryCode">
+                @for (country of countries(); track country.code) {
+                <mat-option [value]="country.code">
+                    {{ country.name }} ({{ country.code }})
+                </mat-option>
+                }
+            </mat-select>
+            @if (paybillsForm.controls.countryCode.hasError('required')) {
+            <mat-error>
+                Country is required
+            </mat-error>
+            }
+        </mat-form-field>
     </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

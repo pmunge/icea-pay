@@ -41,7 +41,7 @@ export class List {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['name', 'category', 'description', 'status'];
+  readonly displayedColumns = ['index', 'name', 'category', 'description', 'status'];
 
   get filteredChannels(): Channels[] {
     const term = this.searchTerm.trim().toLowerCase();

@@ -11,7 +11,10 @@
                 placeholder="Name, member no., national ID or phone"><mat-icon matSuffix>search</mat-icon></mat-form-field>
         <div class="table-container">
             <table mat-table [dataSource]="pagedMembers" class="product-table">
-                <ng-container matColumnDef="memberNo">
+                <ng-container matColumnDef="index">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+                </ng-container><ng-container matColumnDef="memberNo">
                     <th mat-header-cell *matHeaderCellDef>Member No.</th>
                     <td mat-cell *matCellDef="let member">{{ member.memberNo }}</td>
                 </ng-container><ng-container matColumnDef="name">

@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/env';
 
 import { Product } from '../models/product';
+import { ProductPaybillRequest, ProductPaybillResponse } from '../models/product-paybill';
 
 interface ApiResponse<T> {
   status: number;
@@ -57,6 +58,20 @@ export class ProductService {
     return this.http.delete<void>(
       `${this.apiUrl}/${id}`
     );
+
+  }
+
+
+  /** Routes a paybill to a product for the given country, creating or updating the routing. */
+  allocatePaybill(
+    productId: number,
+    countryId: number,
+    request: ProductPaybillRequest
+  ): Observable<ProductPaybillResponse> {
+
+    return this.http
+      .put<ApiResponse<ProductPaybillResponse>>(`${this.apiUrl}/${productId}/paybills/countries/${countryId}`, request)
+      .pipe(map((res) => res.data));
 
   }
 

@@ -11,8 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 
-import { Profiles } from '../../../core/models/profile';
-import { Profile } from '../../../core/services/profile';
+import { Profile } from '../../../core/models/profile';
+import { ProfileService } from '../../../core/services/profile';
 import { Form } from '../form/form';
 
 
@@ -34,28 +34,30 @@ import { Form } from '../form/form';
   styleUrl: './list.scss'
 })
 export class List implements OnInit {
-  private readonly profileService = inject(Profile)
+  private readonly profileService = inject(ProfileService)
   private readonly dialog = inject(MatDialog);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  profiles: Profiles[] = []
+  profiles: Profile[] = []
 
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['profile'];
+  readonly displayedColumns = ['index', 'name', 'description', 'status'];
 
-  get filteredProfiles(): Profiles[] {
+  get filteredProfiles(): Profile[] {
     const term = this.searchTerm.trim().toLowerCase();
     return !term
       ? this.profiles
       : this.profiles.filter(profile =>
-        profile.profile.toLowerCase().includes(term)
+        [profile.name, profile.description, profile.status].some(value =>
+          String(value ?? '').toLowerCase().includes(term)
+        )
       );
   }
 
-  get pagedProfiles(): Profiles[] {
+  get pagedProfiles(): Profile[] {
     const start = this.pageIndex * this.pageSize;
     return this.filteredProfiles.slice(start, start + this.pageSize);
   }

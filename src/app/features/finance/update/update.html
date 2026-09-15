@@ -5,7 +5,7 @@
     <dl class="paybill-summary">
         <div>
             <dt>Paybill Number</dt>
-            <dd>{{ paybill.paybillNumber }}</dd>
+            <dd>{{ paybill.paybillNo }}</dd>
         </div>
         <div>
             <dt>Provider</dt>
@@ -35,6 +35,12 @@
                 Withdrawal amount cannot exceed the current amount
             </mat-error>
             }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+            <mat-label>
+                Description (optional)
+            </mat-label>
+            <input matInput formControlName="description" placeholder="Reason for withdrawal">
         </mat-form-field>
     </form>
 </mat-dialog-content>

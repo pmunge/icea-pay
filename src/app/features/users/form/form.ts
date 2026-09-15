@@ -15,6 +15,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
 import { Branches } from '../../../core/models/branch';
+import { RoleEntity } from '../../../core/models/roles';
 import { Branch } from '../../../core/services/branch';
 import { StaffService } from '../../../core/services/staff';
 import { AuthService } from '../../../core/services/auth';
@@ -51,7 +52,7 @@ export class Form implements OnInit {
   private dialogRef =
     inject(MatDialogRef<Form>);
 
-  readonly roles = signal<string[]>([]);
+  readonly roles = signal<RoleEntity[]>([]);
 
   readonly branches = signal<Branches[]>([]);
 

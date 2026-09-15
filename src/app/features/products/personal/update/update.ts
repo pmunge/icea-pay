@@ -64,6 +64,14 @@ export class Update {
       this.product.name,
       Validators.required
     ],
+    code: [
+      this.product.code,
+      Validators.required
+    ],
+    description: [
+      this.product.description,
+      Validators.required
+    ],
     businessUnit: [
       businessLineName(this.product.businessLineId) ?? ('' as BusinessUnit | ''),
       Validators.required

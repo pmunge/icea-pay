@@ -16,6 +16,28 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>
+        Code
+      </mat-label>
+      <input matInput formControlName="code" placeholder="Enter product code">
+      @if (updateForm.controls.code.hasError('required')) {
+      <mat-error>
+        Product code is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
+        Description
+      </mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter product description"></textarea>
+      @if (updateForm.controls.description.hasError('required')) {
+      <mat-error>
+        Description is required
+      </mat-error>
+      }
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>
         Business Unit
       </mat-label>
       <mat-select formControlName="businessUnit">

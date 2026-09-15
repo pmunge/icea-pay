@@ -51,7 +51,7 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['memberNo', 'name', 'nationalId', 'phone', 'role', 'status', 'actions'];
+  readonly displayedColumns = ['index', 'memberNo', 'name', 'nationalId', 'phone', 'role', 'status', 'actions'];
 
   get pagedMembers(): Members[] {
     const start = this.pageIndex * this.pageSize;

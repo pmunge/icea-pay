@@ -9,12 +9,25 @@
   <mat-card class="product-card">
     <mat-form-field appearance="outline" class="search-field"><mat-label>Search profiles</mat-label><input matInput
         [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
-        placeholder="Profile name"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+        placeholder="Name, description or status"><mat-icon matSuffix>search</mat-icon></mat-form-field>
     <div class="table-container">
       <table mat-table [dataSource]="pagedProfiles" class="product-table">
-        <ng-container matColumnDef="profile">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container>
+        <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Profile</th>
-          <td mat-cell *matCellDef="let profile"><strong>{{ profile.profile }}</strong></td>
+          <td mat-cell *matCellDef="let profile"><strong>{{ profile.name }}</strong></td>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let profile" class="description-cell">{{ profile.description }}</td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let profile"><span class="status"
+              [class.inactive]="profile.status !== 'Active'">{{ profile.status }}</span></td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>

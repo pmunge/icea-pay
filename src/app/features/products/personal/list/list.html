@@ -7,17 +7,36 @@
       product</button>
   </header>
   <mat-card class="product-card">
-    <mat-form-field appearance="outline" class="search-field"><mat-label>Search products</mat-label><input matInput
-        [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
-        placeholder="Name, business unit, description or status"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+    <div class="filters-row">
+      <mat-form-field appearance="outline" class="search-field"><mat-label>Search products</mat-label><input matInput
+          [(ngModel)]="searchTerm" (ngModelChange)="applySearch()"
+          placeholder="Name, business unit, description or status"><mat-icon matSuffix>search</mat-icon></mat-form-field>
+      <mat-form-field appearance="outline" class="filter-field">
+        <mat-label>Business Line</mat-label>
+        <mat-select [(ngModel)]="businessLineFilter" (ngModelChange)="applySearch()">
+          @for (option of businessLineOptions; track option) {
+          <mat-option [value]="option">{{ option }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
     <div class="table-container">
       <table mat-table [dataSource]="pagedProducts" class="product-table">
-        <ng-container matColumnDef="name">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container><ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef>Product</th>
           <td mat-cell *matCellDef="let product"><strong>{{ product.name }}</strong></td>
+        </ng-container><ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef>Code</th>
+          <td mat-cell *matCellDef="let product">{{ product.code }}</td>
         </ng-container><ng-container matColumnDef="businessUnit">
           <th mat-header-cell *matHeaderCellDef>Business Unit</th>
           <td mat-cell *matCellDef="let product">{{ unitOf(product) }}</td>
+        </ng-container><ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Description</th>
+          <td mat-cell *matCellDef="let product">{{ product.description }}</td>
         </ng-container><ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef>Status</th>
           <td mat-cell *matCellDef="let product"><span class="status" [class.inactive]="!product.active">{{

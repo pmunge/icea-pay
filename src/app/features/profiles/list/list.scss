@@ -65,6 +65,20 @@ tr.mat-mdc-row:hover {
   background: var(--app-blue-soft);
 }
 
+.description-cell {
+  color: var(--app-muted);
+  max-width: 360px;
+}
+
+.status {
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.status.inactive {
+  color: var(--app-muted);
+}
+
 .empty-state {
   padding: 48px 24px;
   color: var(--app-muted);

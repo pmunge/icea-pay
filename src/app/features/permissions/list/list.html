@@ -11,6 +11,10 @@
         matSuffix>search</mat-icon></mat-form-field>
     <div class="table-container">
       <table mat-table [dataSource]="pagedPermissions" class="product-table">
+        <ng-container matColumnDef="index">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let element; let i = index">{{ pageIndex * pageSize + i + 1 }}</td>
+        </ng-container>
         <ng-container matColumnDef="permission">
           <th mat-header-cell *matHeaderCellDef>Permission</th>
           <td mat-cell *matCellDef="let permission"><strong>{{ permission.permission }}</strong></td>

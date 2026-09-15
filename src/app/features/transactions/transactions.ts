@@ -8,10 +8,14 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { Transaction, transactionMemberName } from '../../core/models/transactions';
 import { TransactionsService } from '../../core/services/transactions';
 import { ExportService } from '../../core/services/export';
+
+/** Rolling-window filter applied on top of the free-text search. */
+export type PeriodFilter = 'all' | 'daily' | 'weekly' | 'monthly';
 
 @Component({
   selector: 'app-transactions',
@@ -25,6 +29,7 @@ import { ExportService } from '../../core/services/export';
     MatIconModule,
     MatInputModule,
     MatPaginatorModule,
+    MatSelectModule,
     MatTableModule
   ],
   templateUrl: './transactions.html',
@@ -37,10 +42,18 @@ export class Transactions implements OnInit {
 
   transactions: Transaction[] = [];
   searchTerm = '';
+  periodFilter: PeriodFilter = 'all';
+  readonly periodOptions: { value: PeriodFilter; label: string }[] = [
+    { value: 'all', label: 'All' },
+    { value: 'daily', label: 'Daily' },
+    { value: 'weekly', label: 'Weekly' },
+    { value: 'monthly', label: 'Monthly' }
+  ];
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
   readonly displayedColumns = [
+    'index',
     'date',
     'reference',
     'memberName',
@@ -54,8 +67,10 @@ export class Transactions implements OnInit {
 
   get filteredTransactions(): Transaction[] {
     const term = this.searchTerm.trim().toLowerCase();
-    return !term ? this.transactions : this.transactions.filter(transaction =>
-      [
+    return this.transactions.filter(transaction => {
+      if (!this.isWithinPeriod(this.dateOf(transaction), this.periodFilter)) return false;
+      if (!term) return true;
+      return [
         transaction.reference,
         transaction.productId,
         transaction.rail,
@@ -64,8 +79,28 @@ export class Transactions implements OnInit {
         this.memberNameOf(transaction),
         transaction.amount,
         transaction.status
-      ].some(value => String(value ?? '').toLowerCase().includes(term))
-    );
+      ].some(value => String(value ?? '').toLowerCase().includes(term));
+    });
+  }
+
+  private isWithinPeriod(dateValue: string, period: PeriodFilter): boolean {
+    if (period === 'all') return true;
+    const date = new Date(dateValue);
+    if (isNaN(date.getTime())) return false;
+
+    const now = new Date();
+    if (period === 'daily') {
+      return date.toDateString() === now.toDateString();
+    }
+    if (period === 'monthly') {
+      return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
+    }
+
+    const daysSinceMonday = (now.getDay() + 6) % 7;
+    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - daysSinceMonday);
+    const endOfWeek = new Date(startOfWeek);
+    endOfWeek.setDate(startOfWeek.getDate() + 7);
+    return date >= startOfWeek && date < endOfWeek;
   }
 
   memberNameOf(transaction: Transaction): string {

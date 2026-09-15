@@ -59,6 +59,7 @@ export class UnitTransactions implements OnInit {
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
   readonly displayedColumns = [
+    'index',
     'reference',
     'productId',
     'originChannel',

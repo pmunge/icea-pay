@@ -62,8 +62,8 @@
     <mat-form-field appearance="outline">
       <mat-label>Role</mat-label>
       <mat-select formControlName="role">
-        @for (role of roles(); track role) {
-        <mat-option [value]="role">{{ role }}</mat-option>
+        @for (role of roles(); track role.id) {
+        <mat-option [value]="role.name">{{ role.name }}</mat-option>
         }
       </mat-select>
       @if (usersForm.controls.role.hasError('required')) {

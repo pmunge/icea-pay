@@ -15,7 +15,9 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
 import { PAYBILL_PROVIDERS } from '../../../core/models/paybills';
+import { Country } from '../../../core/models/country';
 import { FinanceService } from '../../../core/services/finance-service';
+import { CountryService } from '../../../core/services/country-service';
 //import products
 
 @Component({
@@ -36,11 +38,13 @@ import { FinanceService } from '../../../core/services/finance-service';
 
   styleUrl: './form.scss'
 })
-export class Form {
+export class Form implements OnInit {
 
   private fb = inject(FormBuilder);
 
   private financeService = inject(FinanceService);
+
+  private countryService = inject(CountryService);
 
 
   private dialogRef =
@@ -48,6 +52,8 @@ export class Form {
 
 
   readonly providers = PAYBILL_PROVIDERS;
+
+  readonly countries = signal<Country[]>([]);
 
   saving = false;
 
@@ -60,8 +66,24 @@ export class Form {
       '',
       Validators.required
     ],
+    countryCode: [
+      '',
+      Validators.required
+    ],
 
   });
+
+  ngOnInit(): void {
+    this.countryService.getCountries().subscribe({
+      next: (countries) => {
+        this.countries.set(countries);
+        if (!this.paybillsForm.controls.countryCode.value && countries.length) {
+          this.paybillsForm.controls.countryCode.setValue(countries[0].code);
+        }
+      },
+      error: (error) => console.error('Failed to load countries', error)
+    });
+  }
 
 
   save(): void {
@@ -70,11 +92,11 @@ export class Form {
       return;
     }
 
-    const { paybillNumber, provider } = this.paybillsForm.getRawValue();
+    const { paybillNumber, provider, countryCode } = this.paybillsForm.getRawValue();
     this.saving = true;
 
     this.financeService
-      .createPaybill({ paybillNumber, provider })
+      .createPaybill({ paybillNumber, provider, countryCode })
       .pipe(finalize(() => this.saving = false))
       .subscribe({
         next: (createdPaybill) => {

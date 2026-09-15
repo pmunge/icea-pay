@@ -42,7 +42,7 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['name', 'code', 'location', 'phoneNumber', 'active', 'actions'];
+  readonly displayedColumns = ['index', 'name', 'code', 'location', 'phoneNumber', 'active', 'actions'];
 
   get filteredBranches(): Branches[] {
     const term = this.searchTerm.trim().toLowerCase();

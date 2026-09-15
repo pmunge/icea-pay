@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
 import { Observable, map } from 'rxjs'
-import { Profiles } from '../models/profile';
+import { Profile } from '../models/profile';
 
 import { environment } from '../../../environments/env';
 
@@ -15,19 +15,19 @@ interface ApiResponse<T> {
 @Injectable({
   providedIn: 'root',
 })
-export class Profile {
+export class ProfileService {
 
   private http = inject(HttpClient)
   private readonly apiUrl = `${environment.apiUrl}/profiles`
 
-  getProfiles(): Observable<Profiles[]> {
+  getProfiles(): Observable<Profile[]> {
     return this.http
-      .get<ApiResponse<Profiles[]>>(this.apiUrl)
+      .get<ApiResponse<Profile[]>>(this.apiUrl)
       .pipe(map((res) => res.data))
   }
-  createProfiles(profile: Profiles): Observable<Profiles> {
+  createProfile(profile: Profile): Observable<Profile> {
     return this.http
-      .post<ApiResponse<Profiles>>(this.apiUrl, profile)
+      .post<ApiResponse<Profile>>(this.apiUrl, profile)
       .pipe(map((res) => res.data))
   }
 

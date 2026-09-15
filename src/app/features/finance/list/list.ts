@@ -47,14 +47,14 @@ export class List implements OnInit {
   pageIndex = 0;
   pageSize = 5;
   readonly pageSizeOptions = [5, 10, 25];
-  readonly displayedColumns = ['paybillNumber', 'provider', 'actions'];
+  readonly displayedColumns = ['index', 'paybillNumber', 'provider', 'countryCode', 'actions'];
 
   get filteredPaybills(): Paybill[] {
     const term = this.searchTerm.trim().toLowerCase();
     return !term
       ? this.paybills
       : this.paybills.filter(paybill =>
-        [paybill.paybillNumber, paybill.provider].some(value =>
+        [paybill.paybillNumber, paybill.provider, paybill.countryCode].some(value =>
           String(value ?? '').toLowerCase().includes(term)
         )
       );

@@ -27,10 +27,26 @@
   box-shadow: 0 3px 12px rgb(13 26 99 / 8%);
 }
 
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 16px;
+  margin: 0 16px 8px;
+}
+
 .search-field {
   display: block;
+  flex: 1 1 300px;
   max-width: 440px;
-  margin: 0 16px 8px;
+  margin: 0;
+}
+
+.filter-field {
+  display: block;
+  flex: 0 1 180px;
+  min-width: 140px;
+  margin: 0;
 }
 
 .table-container {
@@ -73,7 +89,11 @@ tr.mat-mdc-row:hover {
 }
 
 @media (max-width: 600px) {
-  .search-field {
+  .filters-row {
     margin: 0 12px 8px;
+  }
+
+  .filter-field {
+    flex: 1 1 100%;
   }
 }

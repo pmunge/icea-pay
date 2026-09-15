@@ -8,21 +8,37 @@
   }
 }
 
-.allocation-preview {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 16px;
+.paybill-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px 16px;
+  margin: 0 0 16px;
+  min-width: min(360px, calc(100vw - 64px));
+}
 
-  th,
-  td {
-    text-align: left;
-    padding: 8px 12px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-    font-size: 13px;
-  }
+.paybill-summary dt {
+  margin: 0;
+  color: var(--app-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
 
-  th {
-    font-weight: 600;
-    color: rgba(0, 0, 0, 0.6);
+.paybill-summary dd {
+  margin: 2px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 520px) {
+  .paybill-summary {
+    grid-template-columns: 1fr;
+    min-width: 0;
   }
+}
+
+.country-error {
+  margin: 0 0 16px;
+  color: var(--app-danger, #c62828);
+  font-size: 13px;
 }
