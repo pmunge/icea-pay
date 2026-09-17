@@ -49,10 +49,10 @@
         <button type="submit" class="btn btn-primary" [disabled]="loading()">
           {{ loading() ? 'Signing in…' : 'Sign In' }}
         </button>
+        <p>Forgot your password? <a routerLink="/reset-password" class="link-accent">Reset Password</a></p>
 
       </form>
     </div>
-    <p>Forgot your password? <a routerLink="/reset-password" class="link-accent">Reset Password</a></p>
   </section>
 
   <!-- Right: image panel -->
