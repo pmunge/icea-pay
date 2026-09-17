@@ -135,10 +135,9 @@
 /* ANALYTICS */
 
 .analytics-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(410px, 0.8fr);
+  display: flex;
+  flex-direction: column;
   gap: 16px;
-  align-items: start;
 }
 
 .charts-column {
@@ -154,7 +153,7 @@
 }
 
 .line-chart {
-  height: 214px;
+  height: 280px;
   margin-top: 10px;
 }
 
@@ -188,7 +187,7 @@
 
 .pie-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
 }
 
@@ -224,12 +223,12 @@
 
 @media (max-width: 1100px) {
 
-  .analytics-grid {
-    grid-template-columns: 1fr;
+  .pie-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .line-chart {
-    height: 300px;
+    height: 260px;
   }
 
   .summary-grid {

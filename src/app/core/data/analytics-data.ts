@@ -127,16 +127,19 @@ const UNIT_CONFIG: UnitConfig[] = [
 
 const CHANNEL_BY_PAYMENT: Record<PaymentMethod, [TxnChannel, number][]> = {
   MoMo: [
-    ['USSD', 0.68],
-    ['Mobile App', 0.32],
+    ['USSD', 0.6],
+    ['Mobile App', 0.3],
+    ['Web', 0.1],
   ],
   Cards: [
-    ['USSD', 0.15],
-    ['Mobile App', 0.85],
+    ['USSD', 0.1],
+    ['Mobile App', 0.6],
+    ['Web', 0.3],
   ],
   'Bank Account': [
-    ['USSD', 0.3],
-    ['Mobile App', 0.7],
+    ['USSD', 0.25],
+    ['Mobile App', 0.55],
+    ['Web', 0.2],
   ],
 };
 

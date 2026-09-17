@@ -121,6 +121,17 @@ export const routes: Routes = [
                 }
             },
             {
+                path: 'dashboard/users',
+                canActivate: [roleGuard(['GENERAL', 'LIFE', 'MEDICAL', 'INVEST'])],
+                loadComponent: () =>
+                    import(
+                        './features/unit-users/unit-users'
+                    ).then(m => m.UnitUsers),
+                data: {
+                    breadcrumb: 'Users'
+                }
+            },
+            {
                 path: 'channels',
                 canActivate: [roleGuard('HQ')],
                 loadComponent: () =>

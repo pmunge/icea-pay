@@ -25,52 +25,58 @@
   <!-- SUMMARY CARDS -->
   <div class="summary-grid" [class.summary-grid--single]="scopedToUnit()">
     @for (t of visibleUnitTotals(); track t.unit) {
-    <div class="summary-card">
-      <div class="card-title">{{ t.unit }}</div>
-      <div class="customer-count">{{ t.count | number }}</div>
-      <div class="customer-label">Transactions</div>
-      <div class="income">KES {{ t.money | number }}</div>
-      <div class="income-label">Total money collected</div>
-    </div>
+    <mat-card class="summary-card">
+      <mat-card-content>
+        <div class="card-title">{{ t.unit }}</div>
+        <div class="customer-count">{{ t.count | number }}</div>
+        <div class="customer-label">Transactions</div>
+        <div class="income">KES {{ t.money | number:'1.2-2' }}</div>
+        <div class="income-label">Total money collected</div>
+      </mat-card-content>
+    </mat-card>
     }
   </div>
 
   <div class="analytics-grid">
 
-    <!-- LEFT: TIME-SERIES GRAPHS -->
+    <!-- TOP: TIME-SERIES GRAPHS -->
     <div class="charts-column">
-      <div class="income-card">
-        <div class="card-head">
-          <h2>Money Inflow Over Time</h2>
-          <p>{{ labelOf(granularity()) }} premium &amp; contribution inflow by business unit</p>
-        </div>
-        <div class="line-chart">
-          <canvas
-            baseChart
-            type="line"
-            [data]="moneyChartData()"
-            [options]="lineOptionsMoney">
-          </canvas>
-        </div>
-      </div>
+      <mat-card class="income-card">
+        <mat-card-header>
+          <mat-card-title>Money Inflow Over Time</mat-card-title>
+          <mat-card-subtitle>{{ labelOf(granularity()) }} premium &amp; contribution inflow by business unit</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="line-chart">
+            <canvas
+              baseChart
+              type="line"
+              [data]="moneyChartData()"
+              [options]="lineOptionsMoney">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
 
-      <div class="income-card">
-        <div class="card-head">
-          <h2>Transactions Over Time</h2>
-          <p>{{ labelOf(granularity()) }} transaction count by business unit</p>
-        </div>
-        <div class="line-chart">
-          <canvas
-            baseChart
-            type="line"
-            [data]="countChartData()"
-            [options]="lineOptionsCount">
-          </canvas>
-        </div>
-      </div>
+      <mat-card class="income-card">
+        <mat-card-header>
+          <mat-card-title>Transactions Over Time</mat-card-title>
+          <mat-card-subtitle>{{ labelOf(granularity()) }} transaction count by business unit</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="line-chart">
+            <canvas
+              baseChart
+              type="line"
+              [data]="countChartData()"
+              [options]="lineOptionsCount">
+            </canvas>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
 
-    <!-- RIGHT: BREAKDOWN PIES -->
+    <!-- BOTTOM: BREAKDOWN PIES -->
     <section class="sub-product-section">
       <div class="section-title">
         <h2>Breakdown</h2>
@@ -79,66 +85,74 @@
 
       <div class="pie-grid">
         @if (!scopedToUnit()) {
-        <div class="pie-card">
-          <div class="pie-card__head">
-            <h3>Money by Business Unit</h3>
-            <p>{{ money(model().overall.money) }} total</p>
-          </div>
-          <div class="pie-chart">
-            <canvas
-              baseChart
-              type="pie"
-              [data]="moneyByUnitPie()"
-              [options]="pieOptionsMoney">
-            </canvas>
-          </div>
-        </div>
+        <mat-card class="pie-card">
+          <mat-card-header>
+            <mat-card-title>Money by Business Unit</mat-card-title>
+            <mat-card-subtitle>{{ money(model().overall.money) }} total</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="pie-chart">
+              <canvas
+                baseChart
+                type="pie"
+                [data]="moneyByUnitPie()"
+                [options]="pieOptionsMoney">
+              </canvas>
+            </div>
+          </mat-card-content>
+        </mat-card>
 
-        <div class="pie-card">
-          <div class="pie-card__head">
-            <h3>Transactions by Business Unit</h3>
-            <p>{{ count(model().overall.count) }} total</p>
-          </div>
-          <div class="pie-chart">
-            <canvas
-              baseChart
-              type="pie"
-              [data]="countByUnitPie()"
-              [options]="pieOptionsCount">
-            </canvas>
-          </div>
-        </div>
+        <mat-card class="pie-card">
+          <mat-card-header>
+            <mat-card-title>Transactions by Business Unit</mat-card-title>
+            <mat-card-subtitle>{{ count(model().overall.count) }} total</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="pie-chart">
+              <canvas
+                baseChart
+                type="pie"
+                [data]="countByUnitPie()"
+                [options]="pieOptionsCount">
+              </canvas>
+            </div>
+          </mat-card-content>
+        </mat-card>
         }
 
-        <div class="pie-card">
-          <div class="pie-card__head">
-            <h3>Payment Methods</h3>
-            <p>{{ money(model().overall.money) }} total</p>
-          </div>
-          <div class="pie-chart">
-            <canvas
-              baseChart
-              type="pie"
-              [data]="paymentMethodPie()"
-              [options]="pieOptionsMoney">
-            </canvas>
-          </div>
-        </div>
+        <mat-card class="pie-card">
+          <mat-card-header>
+            <mat-card-title>Payment Methods</mat-card-title>
+            <mat-card-subtitle>{{ money(model().overall.money) }} total</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="pie-chart">
+              <canvas
+                baseChart
+                type="pie"
+                [data]="paymentMethodPie()"
+                [options]="pieOptionsMoney">
+              </canvas>
+            </div>
+          </mat-card-content>
+        </mat-card>
 
-        <div class="pie-card">
-          <div class="pie-card__head">
-            <h3>Transaction Channels</h3>
-            <p>{{ count(model().overall.count) }} total</p>
-          </div>
-          <div class="pie-chart">
-            <canvas
-              baseChart
-              type="pie"
-              [data]="channelPie()"
-              [options]="pieOptionsCount">
-            </canvas>
-          </div>
-        </div>
+        <mat-card class="pie-card">
+          <mat-card-header>
+            <mat-card-title>Transaction Channels</mat-card-title>
+            <mat-card-subtitle>{{ count(model().overall.count) }} total</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="pie-chart">
+              <canvas
+                baseChart
+                type="pie"
+                [data]="channelPie()"
+                [options]="pieOptionsCount">
+              </canvas>
+            </div>
+          </mat-card-content>
+        </mat-card>
       </div>
     </section>
 

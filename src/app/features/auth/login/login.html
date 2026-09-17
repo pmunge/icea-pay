@@ -14,6 +14,19 @@
       <form [formGroup]="loginForm" (ngSubmit)="submit()" class="login-form" novalidate>
 
         <label class="field">
+          <span class="field-label">Country</span>
+          <select formControlName="country">
+            <option value="" disabled>Select your country</option>
+            @for (country of countries(); track country.id) {
+            <option [value]="country.code">{{ country.name }}</option>
+            }
+          </select>
+          @if (loginForm.controls.country.touched && loginForm.controls.country.invalid) {
+          <span class="field-error">Select a country</span>
+          }
+        </label>
+
+        <label class="field">
           <span class="field-label">Email</span>
           <input type="email" formControlName="email" placeholder="Enter your email" autocomplete="email">
           @if (loginForm.controls.email.touched && loginForm.controls.email.invalid) {

@@ -1,0 +1,75 @@
+<h2 mat-dialog-title>
+    Withdrawal Statement
+</h2>
+<mat-dialog-content>
+    <dl class="paybill-summary">
+        <div>
+            <dt>Paybill Number</dt>
+            <dd>{{ paybill.paybillNo }}</dd>
+        </div>
+        <div>
+            <dt>Provider</dt>
+            <dd>{{ paybill.provider }}</dd>
+        </div>
+        <div>
+            <dt>Total Withdrawn</dt>
+            <dd>{{ totalWithdrawn() | number:'1.2-2' }}</dd>
+        </div>
+    </dl>
+
+    <div class="period-toggle">
+        <mat-button-toggle-group [value]="period()" (change)="setPeriod($any($event.value))">
+            <mat-button-toggle value="daily">Daily</mat-button-toggle>
+            <mat-button-toggle value="weekly">Weekly</mat-button-toggle>
+        </mat-button-toggle-group>
+        <p class="period-hint">
+            @if (period() === 'daily') {
+            Showing today's withdrawals — resets automatically at midnight.
+            } @else {
+            Showing this week's withdrawals — resets automatically every Monday.
+            }
+        </p>
+    </div>
+
+    <div class="table-container">
+        @if (loading()) {
+        <div class="empty-state">Loading statement…</div>
+        } @else if (error()) {
+        <div class="empty-state">{{ error() }}</div>
+        } @else {
+        <table mat-table [dataSource]="windowWithdrawals()" class="statement-table">
+            <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef>Time</th>
+                <td mat-cell *matCellDef="let txn">{{ txn.createdAt | date:'dd MMM, HH:mm' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="amount">
+                <th mat-header-cell *matHeaderCellDef>Amount</th>
+                <td mat-cell *matCellDef="let txn">{{ txn.amount | number:'1.2-2' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="by">
+                <th mat-header-cell *matHeaderCellDef>By</th>
+                <td mat-cell *matCellDef="let txn">{{ withdrawnBy(txn) }}</td>
+            </ng-container>
+            <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef>Note</th>
+                <td mat-cell *matCellDef="let txn">{{ note(txn) }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        @if (!windowWithdrawals().length) {
+        <div class="empty-state">No withdrawals in this period.</div>
+        }
+        }
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-stroked-button type="button" [disabled]="loading() || !windowWithdrawals().length"
+        (click)="downloadPdf()">
+        <mat-icon aria-hidden="true">picture_as_pdf</mat-icon>
+        Download as PDF
+    </button>
+    <button mat-button type="button" mat-dialog-close>
+        Close
+    </button>
+</mat-dialog-actions>

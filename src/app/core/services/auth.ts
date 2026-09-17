@@ -56,12 +56,10 @@ export class AuthService {
   /** Cached resolution of the signed-in staff member's own branch — reset on login/logout. */
   private myBranch$?: Observable<Branches | null>;
 
-  /**
-   * Step 1 of login: POST the credentials to the backend. On success the
-   * backend sends an OTP and the response says whether one is required; the
-   * caller then routes to the /otp page. If no OTP is required the backend
-   * has already returned a full session, so we log the user in immediately.
-   */
+  /** Cached resolution of the signed-in staff member's own full name — reset on login/logout. */
+  private myName$?: Observable<string>;
+
+  
   requestOtp(email: string, password: string): Observable<AuthResponseData> {
     return this.http
       .post<ApiResponse<AuthResponseData>>(`${this.authUrl}/login`, { email, password })
@@ -135,6 +133,7 @@ export class AuthService {
 
   private completeLogin(data: AuthResponseData): void {
     this.myBranch$ = undefined;
+    this.myName$ = undefined;
     localStorage.setItem(TOKEN_KEY, data.token);
     this.storeUser({
       staffId: data.staffId,
@@ -151,6 +150,7 @@ export class AuthService {
 
   logout(): void {
     this.myBranch$ = undefined;
+    this.myName$ = undefined;
     localStorage.removeItem(STORAGE_KEY);
     localStorage.removeItem(TOKEN_KEY);
     this.currentUser.set(null);
@@ -199,6 +199,32 @@ export class AuthService {
 
   getMyBranchId(): Observable<number | null> {
     return this.getMyBranch().pipe(map((branch) => branch?.id ?? null));
+  }
+
+  /**
+   * The signed-in staff member's full name, resolved from /staff since the
+   * login response itself only carries a username. Falls back to the
+   * username (then email) if the lookup fails or finds no match.
+   */
+  getMyName(): Observable<string> {
+    const user = this.currentUser();
+    if (!user) return of('Unknown');
+
+    const fallback = user.username || user.email || 'Unknown';
+
+    if (!this.myName$) {
+      this.myName$ = this.staffService.getStaff().pipe(
+        map((staff) => {
+          const member = staff.find((s) => s.id === user.staffId);
+          const name = member ? `${member.firstName} ${member.surName}`.trim() : '';
+          return name || fallback;
+        }),
+        catchError(() => of(fallback)),
+        shareReplay(1)
+      );
+    }
+
+    return this.myName$;
   }
 
   private storeUser(user: AuthUser): void {

@@ -22,14 +22,20 @@
                     <td mat-cell *matCellDef="let paybill">{{ paybill.provider }}</td>
                 </ng-container><ng-container matColumnDef="balance">
                     <th mat-header-cell *matHeaderCellDef>Balance</th>
-                    <td mat-cell *matCellDef="let paybill">{{ paybill.balance }}</td>
+                    <td mat-cell *matCellDef="let paybill">{{ paybill.balance | number:'1.2-2' }}</td>
                 </ng-container><ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef>Actions</th>
                     <td mat-cell *matCellDef="let paybill">
-                        <button mat-stroked-button color="primary" type="button" aria-label="Withdraw"
-                            (click)="openWithdrawDialog(paybill)">
-                            <mat-icon>payments</mat-icon>Withdraw
-                        </button>
+                        <div class="actions-cell">
+                            <button mat-stroked-button color="primary" type="button" aria-label="Withdraw"
+                                (click)="openWithdrawDialog(paybill)">
+                                <mat-icon>payments</mat-icon>Withdraw
+                            </button>
+                            <button mat-stroked-button type="button" aria-label="Statement"
+                                (click)="openStatementDialog(paybill)">
+                                <mat-icon>receipt_long</mat-icon>Statement
+                            </button>
+                        </div>
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

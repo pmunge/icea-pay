@@ -6,6 +6,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
 
 import { ChartConfiguration, ChartOptions, TooltipItem } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
@@ -51,7 +52,7 @@ const PIE_PALETTES = [
  */
 @Component({
   selector: 'app-dashboard-view',
-  imports: [CommonModule, BaseChartDirective, TransactionsTable],
+  imports: [CommonModule, MatCardModule, BaseChartDirective, TransactionsTable],
   templateUrl: './dashboard-view.html',
   styleUrl: './dashboard-view.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,6 +76,10 @@ export class DashboardView {
   private readonly now = Date.now();
 
   private readonly nfFull = new Intl.NumberFormat('en');
+  private readonly nfMoney = new Intl.NumberFormat('en', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
   private readonly nfCompact = new Intl.NumberFormat('en', {
     notation: 'compact',
     maximumFractionDigits: 1,
@@ -166,7 +171,7 @@ export class DashboardView {
             label: (item: TooltipItem<'line'>) => {
               const y = Number(item.parsed.y ?? 0);
               return kind === 'money'
-                ? `${item.dataset.label}: KES ${this.nfFull.format(Math.round(y))}`
+                ? `${item.dataset.label}: KES ${this.nfMoney.format(y)}`
                 : `${item.dataset.label}: ${this.nfFull.format(y)} txns`;
             },
           },
@@ -249,7 +254,7 @@ export class DashboardView {
               const value = Number(item.parsed);
               const pct = total ? ((value / total) * 100).toFixed(1) : '0.0';
               return kind === 'money'
-                ? ` ${item.label}: KES ${this.nfFull.format(value)} (${pct}%)`
+                ? ` ${item.label}: KES ${this.nfMoney.format(value)} (${pct}%)`
                 : ` ${item.label}: ${this.nfFull.format(value)} txns (${pct}%)`;
             },
           },
@@ -265,7 +270,7 @@ export class DashboardView {
   }
 
   money(value: number): string {
-    return `KES ${this.nfCompact.format(value)}`;
+    return `KES ${this.nfMoney.format(value)}`;
   }
 
   count(value: number): string {

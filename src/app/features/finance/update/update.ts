@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { firstValueFrom } from 'rxjs';
 import {
   AbstractControl,
   FormBuilder,
@@ -20,6 +21,7 @@ import {
 import { WalletBalance } from '../../../core/models/wallet';
 import { WalletService } from '../../../core/services/wallet-service';
 import { ConfirmationService } from '../../../core/services/confirmation';
+import { AuthService } from '../../../core/services/auth';
 
 @Component({
   selector: 'app-paybill-withdraw',
@@ -44,6 +46,8 @@ export class Update {
   private walletService = inject(WalletService);
 
   private confirmationService = inject(ConfirmationService);
+
+  private authService = inject(AuthService);
 
   private dialogRef = inject(MatDialogRef<Update>);
 
@@ -76,18 +80,25 @@ export class Update {
 
     const { adjustAmount, description } = this.withdrawForm.getRawValue();
 
+    const formattedAmount = Number(adjustAmount).toLocaleString('en', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
     const confirmed = await this.confirmationService.confirmWithdraw(
       this.paybill.paybillNo,
-      String(adjustAmount)
+      formattedAmount
     );
     if (!confirmed) return;
 
     this.saving = true;
 
+    const actor = await firstValueFrom(this.authService.getMyName());
+    const composedDescription = `Withdrawn by ${actor}` + (description ? ` — ${description}` : '');
+
     this.walletService
       .withdraw(this.paybill.paybillNo, {
         amount: adjustAmount!,
-        ...(description ? { description } : {})
+        description: composedDescription
       })
       .subscribe({
         next: (transaction) => {

@@ -4,12 +4,10 @@
 }
 
 .logo {
-  height: 64px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 12px;
-
+  padding: 0;
 
   background: #ffffff;
   color: var(--app-navy);
@@ -126,8 +124,7 @@ a.active mat-icon {
 }
 
 .logo-image {
-  height: 100%;
-  width: auto;
-  max-width: 100%;
+  width: 100%;
+  height: auto;
   object-fit: contain;
 }

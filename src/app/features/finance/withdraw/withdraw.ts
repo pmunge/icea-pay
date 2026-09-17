@@ -13,6 +13,7 @@ import { MatTableModule } from '@angular/material/table';
 import { WalletService } from '../../../core/services/wallet-service';
 import { WalletBalance } from '../../../core/models/wallet';
 import { Update } from '../update/update';
+import { Statement } from '../statement/statement';
 
 @Component({
   selector: 'app-withdraw',
@@ -89,6 +90,10 @@ export class Withdraw implements OnInit {
       .subscribe(updated => {
         if (updated) this.loadPaybills();
       });
+  }
+
+  openStatementDialog(paybill: WalletBalance): void {
+    this.dialog.open(Statement, { width: '640px', maxWidth: 'calc(100vw - 32px)', data: paybill });
   }
 
 }

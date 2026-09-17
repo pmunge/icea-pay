@@ -10,7 +10,7 @@ export type BusinessUnit = 'Life' | 'General' | 'Medical' | 'Investment';
 
 export type PaymentMethod = 'MoMo' | 'Cards' | 'Bank Account';
 
-export type TxnChannel = 'USSD' | 'Mobile App';
+export type TxnChannel = 'USSD' | 'Mobile App' | 'Web';
 
 /** Time bucket used by the global dashboard filter. */
 export type TimeGranularity = 'hourly' | 'daily' | 'weekly' | 'monthly';
@@ -46,7 +46,7 @@ export const BUSINESS_UNITS: BusinessUnit[] = [
 
 export const PAYMENT_METHODS: PaymentMethod[] = ['MoMo', 'Cards', 'Bank Account'];
 
-export const TXN_CHANNELS: TxnChannel[] = ['USSD', 'Mobile App'];
+export const TXN_CHANNELS: TxnChannel[] = ['USSD', 'Mobile App', 'Web'];
 
 export const TIME_GRANULARITIES: TimeGranularity[] = [
   'hourly',

@@ -67,6 +67,10 @@ export class CategoryPerformance {
   private readonly now = Date.now();
 
   private readonly nfFull = new Intl.NumberFormat('en');
+  private readonly nfMoney = new Intl.NumberFormat('en', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
   private readonly nfCompact = new Intl.NumberFormat('en', {
     notation: 'compact',
     maximumFractionDigits: 1
@@ -185,7 +189,7 @@ export class CategoryPerformance {
             label: (context: TooltipItem<'line'>) => {
               const y = Number(context.parsed.y ?? 0);
               return kind === 'money'
-                ? `${context.dataset.label}: KES ${this.nfFull.format(Math.round(y))}`
+                ? `${context.dataset.label}: KES ${this.nfMoney.format(y)}`
                 : `${context.dataset.label}: ${this.nfFull.format(y)} txns`;
             }
           }
@@ -277,7 +281,7 @@ export class CategoryPerformance {
               const value = Number(item.parsed);
               const pct = total ? ((value / total) * 100).toFixed(1) : '0.0';
               return kind === 'money'
-                ? ` ${item.label}: KES ${this.nfFull.format(value)} (${pct}%)`
+                ? ` ${item.label}: KES ${this.nfMoney.format(value)} (${pct}%)`
                 : ` ${item.label}: ${this.nfFull.format(value)} txns (${pct}%)`;
             }
           }
@@ -293,7 +297,7 @@ export class CategoryPerformance {
   }
 
   money(value: number): string {
-    return `KES ${this.nfCompact.format(value)}`;
+    return `KES ${this.nfMoney.format(value)}`;
   }
 
   count(value: number): string {

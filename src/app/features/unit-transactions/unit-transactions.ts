@@ -145,7 +145,10 @@ export class UnitTransactions implements OnInit {
   }
 
   exportToPdf(): void {
-    const exportData = this.getExportData();
+    const exportData = this.getExportData().map(row => ({
+      ...row,
+      amount: Number(row['amount']).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    }));
     const columns = ['reference', 'productId', 'originChannel', 'paymentOption', 'payerPhone', 'memberName', 'amount', 'status', 'date'];
     const title = `${this.businessUnit()} Transactions Report`;
 
