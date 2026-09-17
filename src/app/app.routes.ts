@@ -16,6 +16,12 @@ export const routes: Routes = [
                 .then(m => m.Login)
     },
     {
+        path: 'activate',
+        loadComponent: () =>
+            import('./features/auth/activate/activate')
+                .then(m => m.Activate)
+    },
+    {
         path: 'otp',
         canActivate: [otpGuard],
         loadComponent: () =>

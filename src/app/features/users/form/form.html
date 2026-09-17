@@ -55,33 +55,30 @@
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>County</mat-label>
-      <input matInput formControlName="county" placeholder="Enter county">
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Profile</mat-label>
-      <mat-select formControlName="role">
-        @for (role of roles(); track role.id) {
-        <mat-option [value]="role.name">{{ role.name }}</mat-option>
+      <mat-label>Country</mat-label>
+      <mat-select formControlName="countryCode">
+        @for (country of countries(); track country.id) {
+        <mat-option [value]="country.code">{{ country.name }}</mat-option>
         }
       </mat-select>
-      @if (usersForm.controls.role.hasError('required')) {
-      <mat-error>Profile is required</mat-error>
+      @if (usersForm.controls.countryCode.hasError('required')) {
+      <mat-error>Country is required</mat-error>
       }
     </mat-form-field>
 
     <mat-form-field appearance="outline">
-      <mat-label>Branch</mat-label>
-      <mat-select formControlName="branchId">
-        <mat-option [value]="null">No branch</mat-option>
-        @for (branch of branches(); track branch.id) {
-        <mat-option [value]="branch.id">{{ branch.name }}</mat-option>
+      <mat-label>Profile</mat-label>
+      <mat-select formControlName="profileId">
+        @for (profile of profiles(); track profile.id) {
+        <mat-option [value]="profile.id">{{ profile.name }}</mat-option>
         }
       </mat-select>
+      @if (usersForm.controls.profileId.hasError('required')) {
+      <mat-error>Profile is required</mat-error>
+      }
     </mat-form-field>
 
-    <p class="hint">An initial password will be auto-generated and emailed to this address.</p>
+    <p class="hint">An expiring, single-use activation link will be emailed to this address. The user sets their own password and MFA during activation.</p>
   </form>
 </mat-dialog-content>
 <mat-dialog-actions align="end">

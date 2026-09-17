@@ -144,6 +144,16 @@
   font-size: 13px;
 }
 
+.link-accent {
+  color: var(--app-blue, #0c67c8);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-accent:hover {
+  text-decoration: underline;
+}
+
 .link-btn {
   border: 0;
   background: transparent;

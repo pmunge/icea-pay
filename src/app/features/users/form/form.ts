@@ -14,11 +14,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { finalize } from 'rxjs/operators';
 
-import { Branches } from '../../../core/models/branch';
-import { RoleEntity } from '../../../core/models/roles';
-import { Branch } from '../../../core/services/branch';
-import { StaffService } from '../../../core/services/staff';
 import { AuthService } from '../../../core/services/auth';
+import { Profile } from '../../../core/models/profile';
+import { ProfileService } from '../../../core/services/profile';
+import { Country } from '../../../core/models/country';
+import { CountryService } from '../../../core/services/country-service';
 
 
 @Component({
@@ -41,20 +41,25 @@ import { AuthService } from '../../../core/services/auth';
 })
 export class Form implements OnInit {
 
+  /** Sent to the backend as fixed defaults; not exposed in the form. */
+  private static readonly DEFAULT_BRANCH_ID = 1;
+  private static readonly DEFAULT_BUSINESS_LINE_ID = 1;
+  private static readonly DEFAULT_COUNTY = 'Nairobi';
+
   private fb = inject(FormBuilder);
 
   private authService = inject(AuthService);
 
-  private staffService = inject(StaffService);
+  private profileService = inject(ProfileService);
 
-  private branchService = inject(Branch);
+  private countryService = inject(CountryService);
 
   private dialogRef =
     inject(MatDialogRef<Form>);
 
-  readonly roles = signal<RoleEntity[]>([]);
+  readonly profiles = signal<Profile[]>([]);
 
-  readonly branches = signal<Branches[]>([]);
+  readonly countries = signal<Country[]>([]);
 
   readonly saving = signal(false);
 
@@ -64,22 +69,21 @@ export class Form implements OnInit {
     middleName: [''],
     surName: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    role: ['', Validators.required],
+    profileId: [null as number | null, Validators.required],
     phoneNumber: [''],
     idNumber: [''],
-    county: [''],
-    branchId: [null as number | null]
+    countryCode: ['', Validators.required]
   });
 
   ngOnInit(): void {
-    this.staffService.getAllowedRoles().subscribe({
-      next: (roles) => this.roles.set(roles),
-      error: (error) => console.error('Failed to load allowed roles', error)
+    this.profileService.getActiveProfiles().subscribe({
+      next: (profiles) => this.profiles.set(profiles),
+      error: (error) => console.error('Failed to load active profiles', error)
     });
 
-    this.branchService.getBranches(true).subscribe({
-      next: (branches) => this.branches.set(branches),
-      error: (error) => console.error('Failed to load branches', error)
+    this.countryService.getCountries().subscribe({
+      next: (countries) => this.countries.set(countries),
+      error: (error) => console.error('Failed to load countries', error)
     });
   }
 
@@ -89,11 +93,17 @@ export class Form implements OnInit {
       return;
     }
 
-    const { branchId, ...rest } = this.usersForm.getRawValue();
+    const { profileId, ...rest } = this.usersForm.getRawValue();
     this.saving.set(true);
 
     this.authService
-      .register({ ...rest, branchId: branchId ?? undefined })
+      .register({
+        ...rest,
+        profileId: profileId!,
+        branchId: Form.DEFAULT_BRANCH_ID,
+        businessLineId: Form.DEFAULT_BUSINESS_LINE_ID,
+        county: Form.DEFAULT_COUNTY
+      })
       .pipe(finalize(() => this.saving.set(false)))
       .subscribe({
         next: (createdUser) => {

@@ -25,11 +25,27 @@
         <p class="period-hint">
             @if (period() === 'daily') {
             Showing today's withdrawals — resets automatically at midnight.
-            } @else {
+            } @else if (period() === 'weekly') {
             Showing this week's withdrawals — resets automatically every Monday.
             }
         </p>
     </div>
+
+    <form [formGroup]="dateRangeForm" class="date-range" (ngSubmit)="applyCustomRange()">
+        <mat-form-field appearance="outline">
+            <mat-label>Withdrawal date range</mat-label>
+            <mat-date-range-input [rangePicker]="rangePicker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" placeholder="End date">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="rangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #rangePicker></mat-date-range-picker>
+        </mat-form-field>
+        <button mat-stroked-button type="submit">Apply range</button>
+    </form>
+    @if (rangeError()) {
+    <p class="range-error">{{ rangeError() }}</p>
+    }
 
     <div class="table-container">
         @if (loading()) {
@@ -58,7 +74,7 @@
             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
         @if (!windowWithdrawals().length) {
-        <div class="empty-state">No withdrawals in this period.</div>
+        <div class="empty-state">No withdrawals in the selected date range.</div>
         }
         }
     </div>

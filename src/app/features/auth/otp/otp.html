@@ -33,6 +33,7 @@
         <button type="submit" class="btn btn-primary" [disabled]="loading()">
           {{ loading() ? 'Verifying…' : 'Verify & Continue' }}
         </button>
+        <p>OTP not sent? Click <a routerLink="/reset-password" class="link-accent">Resend OTP</a></p>
 
         <div class="form-row">
           <button type="button" class="link-btn" (click)="cancel()">

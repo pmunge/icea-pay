@@ -1,0 +1,62 @@
+<main class="activation-layout">
+  <section class="activation-panel">
+    <header class="brand">
+      <img src="/static/images/logo.png" alt="ICEA LION" class="brand-logo">
+      <span class="brand-name">ICEA LION</span>
+    </header>
+
+    <div class="form-wrap">
+      <h1>Activate your account</h1>
+
+      @if (loading()) {
+        <p class="message">Validating your secure activation link…</p>
+      } @else if (errorMessage() && !email()) {
+        <p class="form-error">{{ errorMessage() }}</p>
+        <button type="button" class="link-btn" (click)="backToLogin()">Back to sign in</button>
+      } @else {
+        <p class="subtitle">Set a password and enrol your authenticator app for {{ email() }}.</p>
+
+        <section class="mfa-setup" aria-label="Authenticator setup">
+          <h2>Set up multi-factor authentication</h2>
+          <p>Scan this QR code with your authenticator app, then enter its six-digit code below.</p>
+          <img [src]="qrCodeDataUrl()" alt="Authenticator setup QR code" class="qr-code">
+        </section>
+
+        <form [formGroup]="activationForm" (ngSubmit)="submit()" novalidate>
+          <label class="field">
+            <span>New password</span>
+            <input type="password" formControlName="password" autocomplete="new-password">
+            @if (activationForm.controls.password.touched && activationForm.controls.password.invalid) {
+              <small>Use 12+ characters with upper/lowercase letters, a number, and a symbol.</small>
+            }
+          </label>
+
+          <label class="field">
+            <span>Confirm new password</span>
+            <input type="password" formControlName="confirmPassword" autocomplete="new-password">
+          </label>
+
+          <label class="field">
+            <span>Authenticator code</span>
+            <input type="text" formControlName="totpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456">
+            @if (activationForm.controls.totpCode.touched && activationForm.controls.totpCode.invalid) {
+              <small>Enter the current six-digit code from your authenticator app.</small>
+            }
+          </label>
+
+          @if (errorMessage()) {
+            <p class="form-error">{{ errorMessage() }}</p>
+          }
+
+          <button type="submit" class="btn" [disabled]="submitting()">
+            {{ submitting() ? 'Activating…' : 'Activate account' }}
+          </button>
+        </form>
+      }
+    </div>
+  </section>
+
+  <aside class="image-panel" aria-hidden="true">
+    <img src="/static/images/login.png" alt="" class="image-panel-bg">
+  </aside>
+</main>

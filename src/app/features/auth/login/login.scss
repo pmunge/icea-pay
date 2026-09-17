@@ -185,6 +185,16 @@
   text-decoration: underline;
 }
 
+.link-accent {
+  color: var(--app-blue, #0c67c8);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.link-accent:hover {
+  text-decoration: underline;
+}
+
 .link-strong {
   font-weight: 600;
   color: #000;

@@ -25,6 +25,18 @@ export class ProfileService {
       .get<ApiResponse<Profile[]>>(this.apiUrl)
       .pipe(map((res) => res.data))
   }
+
+  /**
+   * Profiles eligible for assignment during user onboarding. The server must
+   * still validate the profile's status and the caller's authority.
+   */
+  getActiveProfiles(): Observable<Profile[]> {
+    return this.getProfiles().pipe(
+      map((profiles) =>
+        profiles.filter((profile) => profile.status.trim().toLowerCase() === 'active')
+      )
+    );
+  }
   createProfile(profile: Profile): Observable<Profile> {
     return this.http
       .post<ApiResponse<Profile>>(this.apiUrl, profile)

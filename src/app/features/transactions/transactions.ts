@@ -57,7 +57,7 @@ export class Transactions implements OnInit {
     'date',
     'reference',
     'memberName',
-    'productId',
+    'productName',
     'originChannel',
     'rail',
     'paymentOption',
@@ -72,7 +72,7 @@ export class Transactions implements OnInit {
       if (!term) return true;
       return [
         transaction.reference,
-        transaction.productId,
+        transaction.productName,
         transaction.rail,
         transaction.originChannel,
         transaction.paymentOption,
@@ -161,7 +161,7 @@ export class Transactions implements OnInit {
       ...row,
       amount: Number(row['amount']).toLocaleString('en', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
     }));
-    const columns = ['reference', 'productId', 'originChannel', 'rail', 'paymentOption', 'payerPhone', 'memberName', 'amount', 'status', 'date'];
+    const columns = ['reference', 'productName', 'originChannel', 'rail', 'paymentOption', 'payerPhone', 'memberName', 'amount', 'status', 'date'];
     const title = 'Transactions Report';
 
     this.exportService.exportToPdf(
@@ -175,7 +175,7 @@ export class Transactions implements OnInit {
   private getExportData(): Array<Record<string, string | number>> {
     return this.filteredTransactions.map(transaction => ({
       reference: transaction.reference,
-      productId: transaction.productId,
+      productName: transaction.productId,
       originChannel: transaction.originChannel,
       rail: transaction.rail,
       paymentOption: transaction.paymentOption,

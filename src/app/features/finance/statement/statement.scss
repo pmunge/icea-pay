@@ -34,6 +34,23 @@
   font-size: 12px;
 }
 
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.date-range mat-form-field {
+  flex: 1;
+}
+
+.range-error {
+  margin: -4px 0 12px;
+  color: #b00020;
+  font-size: 12px;
+}
+
 .table-container {
   overflow-x: auto;
   max-height: 360px;
@@ -80,5 +97,10 @@ mat-dialog-actions {
   .paybill-summary {
     grid-template-columns: 1fr;
     min-width: 0;
+  }
+
+  .date-range {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

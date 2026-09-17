@@ -4,11 +4,14 @@ export interface StaffRegisterRequest {
     middleName?: string;
     surName: string;
     email: string;
-    role: string;
+    /** ID of the access profile to assign. The API resolves its roles and permissions. */
+    profileId: number;
     phoneNumber?: string;
     idNumber?: string;
     county?: string;
     branchId?: number;
+    businessLineId?: number;
+    countryCode?: string;
 }
 
 export interface Staff {

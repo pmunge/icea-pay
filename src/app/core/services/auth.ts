@@ -23,6 +23,27 @@ export interface AuthResponseData {
   requiresOtp: boolean;
 }
 
+/** Response to an admin creating an onboarding invitation; never contains credentials. */
+export interface StaffOnboardingResponse {
+  staffId: string;
+  activationExpiresAt: string;
+  message: string;
+}
+
+/** Details returned only after the server has validated an activation token. */
+export interface ActivationDetails {
+  email: string;
+  activationExpiresAt: string;
+  /** A server-generated QR-code data URL for TOTP enrolment. */
+  totpQrCodeDataUrl: string;
+}
+
+export interface ActivateAccountRequest {
+  token: string;
+  password: string;
+  totpCode: string;
+}
+
 interface ApiResponse<T> {
   status: number;
   success: boolean;
@@ -81,18 +102,49 @@ export class AuthService {
   }
 
   /**
-   * Create a new staff login (HQ only). The backend auto-generates the
-   * initial password and emails it to the new staff member.
+   * Start onboarding for a new staff member (HQ only). The API validates the
+   * profile and caller's authority, then sends a single-use, expiring
+   * activation token. It must never return or email a password.
    */
-  register(payload: StaffRegisterRequest): Observable<AuthResponseData> {
+  register(payload: StaffRegisterRequest): Observable<StaffOnboardingResponse> {
     return this.http
-      .post<ApiResponse<AuthResponseData>>(`${this.authUrl}/register`, payload)
+      .post<ApiResponse<StaffOnboardingResponse>>(`${this.authUrl}/register`, payload)
       .pipe(
         map((res) => {
           if (!res.success) {
             throw new Error(res.message || 'Failed to register staff member');
           }
           return res.data;
+        })
+      );
+  }
+
+  /** Validates an invitation token and obtains the TOTP QR code to display. */
+  getActivationDetails(token: string): Observable<ActivationDetails> {
+    return this.http
+      .post<ApiResponse<ActivationDetails>>(`${this.authUrl}/activation-details`, { token })
+      .pipe(
+        map((res) => {
+          if (!res.success) {
+            throw new Error(res.message || 'This activation link is invalid or has expired.');
+          }
+          return res.data;
+        })
+      );
+  }
+
+  /**
+   * Completes activation. The API must verify the TOTP code, hash the password
+   * and consume the token atomically; it must not issue an authenticated session.
+   */
+  activateAccount(payload: ActivateAccountRequest): Observable<void> {
+    return this.http
+      .post<ApiResponse<null>>(`${this.authUrl}/activate`, payload)
+      .pipe(
+        map((res) => {
+          if (!res.success) {
+            throw new Error(res.message || 'Account activation failed.');
+          }
         })
       );
   }

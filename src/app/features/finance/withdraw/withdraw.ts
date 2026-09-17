@@ -42,7 +42,7 @@ export class Withdraw implements OnInit {
   searchTerm = '';
   pageIndex = 0;
   pageSize = 5;
-  readonly pageSizeOptions = [5, 10, 25];
+  readonly pageSizeOptions = [5, 10, 25];  
   readonly displayedColumns = ['index', 'paybillNo', 'provider', 'balance', 'actions'];
 
   get filteredPaybills(): WalletBalance[] {
